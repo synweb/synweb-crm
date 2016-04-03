@@ -1,0 +1,5 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<connectionStrings>
+  <add name="DefaultConnection" connectionString="data source=database.ru;initial catalog=SynWebCRM;persist security info=True;user id=username;password=pwd;MultipleActiveResultSets=True;App=EntityFramework" providerName="System.Data.SqlClient" />
+  <add name="Model" connectionString="data source=database.ru;initial catalog=SynWebCRM;persist security info=True;user id=username;password=pwd;MultipleActiveResultSets=True;App=EntityFramework" providerName="System.Data.SqlClient" />
+</connectionStrings>
