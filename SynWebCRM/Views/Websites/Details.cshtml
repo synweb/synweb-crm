@@ -1,0 +1,58 @@
+﻿@model SynWebCRM.Data.Website
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Website</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Customer.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Customer.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreationDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreationDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Domain)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Domain)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.HostingEndingDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.HostingEndingDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.HostingPrice)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.HostingPrice)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Редактировать", "Edit", new { id = Model.WebsiteId }) |
+    @Html.ActionLink("Назад к списку", "Index")
+</p>

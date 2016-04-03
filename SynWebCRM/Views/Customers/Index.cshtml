@@ -1,0 +1,64 @@
+﻿@using System.Globalization
+@model IEnumerable<SynWebCRM.Data.Customer>
+
+@{
+    ViewBag.Title = "Клиенты";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<p>
+    @Html.ActionLink("Создать", "Create")
+</p>
+<table class="table text-center">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.CreationDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Source)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Phone)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Email)
+        </th>
+        <th>
+            Заявок
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.CreationDate)
+        </td>
+        <td>
+            <a title="Подробнее" href="/Customers/Details/@item.CustomerId">@item.Name</a>
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Source)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Phone)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Email)
+        </td>
+        <td>
+            @item.Deals.Count
+        </td>
+        <td>
+            <a title="Подробнее" href="/Customers/Details/@item.CustomerId"><i class="fa fa-eye"></i></a> |
+            <a title="Редактировать" href="/Customers/Edit/@item.CustomerId"><i class="fa fa-pencil"></i></a> |
+            <a title="Удалить" href="/Customers/Delete/@item.CustomerId"><i class="fa fa-trash-o"></i></a>
+        </td>
+    </tr>
+}
+
+</table>

@@ -1,0 +1,109 @@
+﻿@model IEnumerable<SynWebCRM.Data.Deal>
+
+@{
+    ViewBag.Title = "Заявки и сделки";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<p>
+    @Html.ActionLink("Создать", "Create")
+</p>
+
+<table class="table">
+    <tr>
+
+        <th data-bind="sort: { arr: deals, prop: 'creationDate' }">Дата создания<span class="sort-icon"></span></th>
+        <th data-bind="sort: { arr: deals, prop: 'customer.name' }">Клиент<span class="sort-icon"></span></th>
+        <th data-bind="sort: { arr: deals, prop: 'sum' }">Сумма<span class="sort-icon"></span></th>
+        <th data-bind="sort: { arr: deals, prop: 'name' }">Название<span class="sort-icon"></span></th>
+        <th data-bind="sort: { arr: deals, prop: 'type' }">Инициатива<span class="sort-icon"></span></th>
+        <th data-bind="sort: { arr: deals, prop: 'dealState' }">Состояние<span class="sort-icon"></span></th>
+        <th></th>
+    </tr>
+    @*<tr data-bind="foreach: headers">
+        <th data-bind="click: $parent.sort, text: title"></th>
+        <th data-bind="click: $parent.sort, text: title"></th>
+
+    </tr>*@
+    <tbody data-bind="foreach: deals">
+        <tr>
+            <td data-bind="text: creationDate"></td>
+            <td><a data-bind="attr: {href: '/Customers/Details/'+customer.customerId}"><span data-bind="text: customer.name"></span></a></td>
+            <td data-bind="text: sum"></td>
+            <td data-bind="text: name"></td>
+            <td data-bind="text: type"></td>
+            <td data-bind="text: dealState"></td>
+            <td>
+                <a title="Подробнее" data-bind="attr: {href: '/Deals/Details/'+dealId}"><i class="fa fa-eye"></i></a> |
+                <a title="Редактировать" data-bind="attr: {href: '/Deals/Edit/'+dealId}"><i class="fa fa-pencil"></i></a> |
+                <a title="Удалить" data-bind="attr: {href: '/Deals/Delete/'+dealId}"><i class="fa fa-trash-o"></i></a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+@section Scripts {
+    <script>
+        ko.bindingHandlers.sort = {
+            init: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+                var asc = false;
+                element.style.cursor = 'pointer';
+
+                element.onclick = function () {
+                    var value = valueAccessor();
+                    var prop = value.prop;
+                    var data = value.arr;
+
+                    asc = !asc;
+
+                    $("span.sort-icon").html("");
+                    $(element).children("span").html(asc ? "▲" : "▼");
+
+                    data.sort(function (left, right) {
+                        var rec1 = left;
+                        var rec2 = right;
+
+                        if (!asc) {
+                            rec1 = right;
+                            rec2 = left;
+                        }
+
+                        var props = prop.split('.');
+                        for (var i in props) {
+                            var propName = props[i];
+                            var parenIndex = propName.indexOf('()');
+                            if (parenIndex > 0) {
+                                propName = propName.substring(0, parenIndex);
+                                rec1 = rec1[propName]();
+                                rec2 = rec2[propName]();
+                            } else {
+                                rec1 = rec1[propName];
+                                rec2 = rec2[propName];
+                            }
+                        }
+                        if (!rec1 && !rec2) return 0;
+                        if (rec1 && !rec2) return 1;
+                        if (!rec1 && rec2) return -1;
+                        return rec1 == rec2 ? 0 : rec1 < rec2 ? -1 : 1;
+                    });
+                };
+            }
+        };
+
+        $(function() {
+            var viewModel = function() {
+                var self = this;
+                self.deals = ko.observableArray();
+
+                $.getJSON('/api/deals/get', null, function (res) {
+                    $(res).each(function () {
+                        self.deals.push(this);
+                    });
+                });
+            }
+
+            ko.applyBindings(new viewModel());
+        })
+    </script>
+}

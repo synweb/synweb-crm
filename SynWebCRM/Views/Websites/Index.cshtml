@@ -1,0 +1,61 @@
+﻿@model IEnumerable<SynWebCRM.Data.Website>
+
+@{
+    ViewBag.Title = "Сайты";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<p>
+    @Html.ActionLink("Создать", "Create")
+</p>
+<table class="table text-center">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Domain)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Customer)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IsActive)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.HostingEndingDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.HostingPrice)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model)
+{
+    bool hostingPayentComes = item.IsActive
+                              && item.HostingEndingDate.HasValue
+                              && item.HostingEndingDate.Value < DateTime.Now.AddDays(14);
+    <tr>
+        <td @(hostingPayentComes?"class=bold":"")>
+            @Html.DisplayFor(modelItem => item.Domain)
+        </td>
+        <td>
+            <a href="/Customers/Details/@item.Customer.CustomerId">@item.Customer.Name</a>
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IsActive)
+        </td>
+        <td @(hostingPayentComes?"class=bold":"")>
+            @Html.DisplayFor(modelItem => item.HostingEndingDate)
+        </td>
+        <td @(hostingPayentComes?"class=bold":"")>
+            @Html.DisplayFor(modelItem => item.HostingPrice)
+        </td>
+        <td>
+            <a title="Подробнее" href="/Websites/Details/@item.WebsiteId"><i class="fa fa-eye"></i></a> |
+            <a title="Редактировать" href="/Websites/Edit/@item.WebsiteId"><i class="fa fa-pencil"></i></a> |
+            <a title="Удалить" href="/Websites/Delete/@item.WebsiteId"><i class="fa fa-trash-o"></i></a>
+        </td>
+    </tr>
+}
+
+</table>

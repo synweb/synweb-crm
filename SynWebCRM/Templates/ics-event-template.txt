@@ -1,0 +1,7 @@
+﻿BEGIN:VEVENT
+UID:%uid%
+SUMMARY:%summary%
+DESCRIPTION:%description%
+DTSTART;VALUE=DATE:%startDate%
+DTEND;VALUE=DATE:%endDate%
+END:VEVENT

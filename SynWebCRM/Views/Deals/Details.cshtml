@@ -1,0 +1,85 @@
+﻿@model SynWebCRM.Data.Deal
+
+@{
+    ViewBag.Title = "Сделка";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<div>
+    <h4>Сделка</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Customer.Name)
+        </dt>
+
+        <dd>
+            <a href="/Customers/Details/@Model.CustomerId">@Model.Customer.Name</a>
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreationDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreationDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Creator)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Creator)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Sum)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Sum)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Type)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Type)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DealStateId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DealState.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+
+        <dd>
+            @if (Model.Description != null)
+            {
+                @Html.Raw(Model.Description.Replace(Environment.NewLine, "<br />"))
+            }
+        </dd>
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Редактировать", "Edit", new { id = Model.DealId }) |
+    @Html.ActionLink("Назад к списку", "Index")
+</p>
