@@ -20,6 +20,7 @@ namespace SynWebCRM.Data
         public DateTime CreationDate { get; set; }
 
         public string Text { get; set; }
+        public string Creator { get; set; }
 
         public ICollection<Customer> Customers { get; set; }
     }

@@ -16,7 +16,12 @@ namespace SynWebCRM.ApiControllers
         {
             try
             {
-                var newNote = new Note() {Text = note.Text, CreationDate = DateTime.Now};
+                var newNote = new Note
+                {
+                    Text = note.Text,
+                    CreationDate = DateTime.Now,
+                    Creator = User.Identity.Name
+                };
                 var cust = new Customer() {CustomerId = note.CustomerId};
                 db.Customers.Attach(cust);
                 newNote.Customers.Add(cust);
@@ -27,7 +32,6 @@ namespace SynWebCRM.ApiControllers
             catch (Exception e)
             {
                 return new ResultModel(e);
-    
             }
         }
 

@@ -24,6 +24,9 @@ namespace SynWebCRM
             WebApiConfigHelper.ApiRoute(config.Routes, "calendar/ics/get", "CalendarApi", "GetICS");
 
             WebApiConfigHelper.ApiRoute(config.Routes, "customers/notes/add", "CustomersApi", "AddNote");
+
+            WebApiConfigHelper.ApiRoute(config.Routes, "note/{id}/delete", "NotesApi", "DeleteNote");
+
         }
     }
 }
