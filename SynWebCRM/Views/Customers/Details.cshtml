@@ -89,53 +89,101 @@
         <p>
             <a href="/Deals/Create?CustomerId=@Model.CustomerId">Создать</a>
         </p>
-        <table class="table">
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => names.CreationDate)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => names.Customer.Name)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => names.Sum)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => names.Name)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => names.Type)
-                </th>
-                <th></th>
-            </tr>
-
-            @foreach (var item in deals)
-            {
+        @if (Model.Deals.Any())
+        {
+            <table class="table">
                 <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CreationDate)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Customer.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Sum)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Type)
-                    </td>
-                    <td>
-                        <a title="Подробнее" href="/Deals/Details/@item.DealId"><i class="fa fa-eye"></i></a> |
-                        <a title="Редактировать" href="/Deals/Edit/@item.DealId"><i class="fa fa-pencil"></i></a> |
-                        <a title="Удалить" href="/Deals/Delete/@item.DealId"><i class="fa fa-trash-o"></i></a>
-                    </td>
+                    <th>
+                        @Html.DisplayNameFor(model => names.CreationDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => names.Customer.Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => names.Sum)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => names.Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => names.Type)
+                    </th>
+                    <th></th>
                 </tr>
-            }
-        </table>
+
+                @foreach (var item in deals)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CreationDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Customer.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Sum)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Type)
+                        </td>
+                        <td>
+                            <a title="Подробнее" href="/Deals/Details/@item.DealId"><i class="fa fa-eye"></i></a> |
+                            <a title="Редактировать" href="/Deals/Edit/@item.DealId"><i class="fa fa-pencil"></i></a> |
+                            <a title="Удалить" href="/Deals/Delete/@item.DealId"><i class="fa fa-trash-o"></i></a>
+                        </td>
+                    </tr>
+                }
+            </table>
+        }
     </div>
+    @if (Model.Notes.Any())
+    {
+        <h4>Заметки</h4>
+        <div class="notes">
+            @foreach (var note in Model.Notes)
+            {
+
+                <div class="panel panel-success">
+
+                    <div class="panel-heading">
+                        <h3 class="panel-title">@note.CreationDate.ToString("yyyy-MM-dd HH:mm")</h3>
+                    </div>
+                    <div class="panel-body">
+                        @Html.Raw(note.Text.Replace(Environment.NewLine, "<br />"))
+                    </div>
+                </div>
+            }
+        </div>
+    }
+
+    <div class="new-note">
+        <h4>Новая заметка</h4>
+        <textarea class="new-note-text form-control"></textarea>
+        <button type="button" class="btn btn-default">Добавить</button>
+    </div>
+
+    @section Scripts{
+        <script>
+            $(function() {
+                $(".new-note button").click(function() {
+                    var txtarea = $("textarea.new-note-text");
+                    var val = txtarea.val();
+                    txtarea.val("");
+                    var customerId = @Model.CustomerId;
+                    if (val) {
+                        $.post("/api/customers/notes/add", { customerId: customerId, text: val }, function(res) {
+                            if (res.succeed) {
+                                location.reload();
+                            }
+                        });
+                    }
+                });
+            });
+        </script>
+    }
 </div>
 <p>
     @Html.ActionLink("Назад к списку", "Index")

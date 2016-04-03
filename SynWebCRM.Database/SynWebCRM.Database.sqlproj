@@ -68,5 +68,7 @@
     <Build Include="Tables\Employee.sql" />
     <Build Include="Tables\DealState.sql" />
     <Build Include="Tables\Event.sql" />
+    <Build Include="Tables\Note.sql" />
+    <Build Include="Tables\Note_Customer.sql" />
   </ItemGroup>
 </Project>

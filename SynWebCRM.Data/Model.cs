@@ -20,12 +20,10 @@ namespace SynWebCRM.Data
         public virtual DbSet<Website> Websites { get; set; }
         public virtual DbSet<DealState> DealStates { get; set; }
         public virtual DbSet<Event> Events { get; set; }
+        public virtual DbSet<Note> Notes { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            
-                
-
             modelBuilder.Entity<Customer>()
                 .Property(e => e.Email)
                 .IsUnicode(false);
@@ -55,6 +53,17 @@ namespace SynWebCRM.Data
             //     .WithRequired(x => x.DealState)
             //     .HasForeignKey(x => x.DealStateId)
             //     .WillCascadeOnDelete(false);
+
+
+            modelBuilder.Entity<Customer>()
+                        .HasMany<Note>(s => s.Notes)
+                        .WithMany(c => c.Customers)
+                        .Map(cs =>
+                        {
+                            cs.MapLeftKey("CustomerId");
+                            cs.MapRightKey("NoteId");
+                            cs.ToTable("Note_Customer");
+                        });
         }
     }
 }

@@ -18,16 +18,12 @@ namespace SynWebCRM
 
 
             WebApiConfigHelper.ApiRoute(config.Routes, "deals/get", "DealsApi", "GetDeals");
+
             WebApiConfigHelper.ApiRoute(config.Routes, "calendar/events/get", "CalendarApi", "GetEvents");
             WebApiConfigHelper.ApiRoute(config.Routes, "calendar/event/create", "CalendarApi", "CreateEvent");
             WebApiConfigHelper.ApiRoute(config.Routes, "calendar/ics/get", "CalendarApi", "GetICS");
 
-
-            //config.Routes.MapHttpRoute(
-            //    name: "DefaultApi",
-            //    routeTemplate: "api/{controller}/{id}",
-            //    defaults: new { id = RouteParameter.Optional }
-            //);
+            WebApiConfigHelper.ApiRoute(config.Routes, "customers/notes/add", "CustomersApi", "AddNote");
         }
     }
 }

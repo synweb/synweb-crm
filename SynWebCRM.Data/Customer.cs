@@ -15,6 +15,7 @@ namespace SynWebCRM.Data
             Deals = new HashSet<Deal>();
             Estimates = new HashSet<Estimate>();
             Websites = new HashSet<Website>();
+            Notes = new HashSet<Note>();
         }
 
         [Display(Name = "Клиент")]
@@ -58,6 +59,9 @@ namespace SynWebCRM.Data
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Website> Websites { get; set; }
+
+        public virtual ICollection<Note> Notes { get; set; }
+
         [Display(Name = "Создатель")]
         public string Creator { get; set; }
     }
