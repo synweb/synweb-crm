@@ -9,6 +9,8 @@ Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SynWebCRM.Database", "SynWe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SynWebCRM.Data", "SynWebCRM.Data\SynWebCRM.Data.csproj", "{F59B71E7-FCE9-47C9-AC09-10B06465B1E4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SynWebCRM.Tests", "SynWebCRM.Tests\SynWebCRM.Tests.csproj", "{537B6A04-2ED6-4FD5-8EFF-CA86701DCE6C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,6 +31,10 @@ Global
 		{F59B71E7-FCE9-47C9-AC09-10B06465B1E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F59B71E7-FCE9-47C9-AC09-10B06465B1E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F59B71E7-FCE9-47C9-AC09-10B06465B1E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{537B6A04-2ED6-4FD5-8EFF-CA86701DCE6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{537B6A04-2ED6-4FD5-8EFF-CA86701DCE6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{537B6A04-2ED6-4FD5-8EFF-CA86701DCE6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{537B6A04-2ED6-4FD5-8EFF-CA86701DCE6C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

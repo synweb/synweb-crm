@@ -4,9 +4,11 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 using SynWebCRM.Data;
+using SynWebCRM.Helpers;
 using SynWebCRM.Security;
 
 namespace SynWebCRM.Controllers
@@ -54,8 +56,11 @@ namespace SynWebCRM.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "CustomerId,Name,Source,Description,Phone,Email,VkId")] Customer customer)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid 
+                && (string.IsNullOrEmpty(customer.VkId)
+                    || ParseHelper.IsVKValid(customer.VkId)))
             {
+                customer.VkId = ParseHelper.ParseVK(customer.VkId);
                 customer.CreationDate = DateTime.Now;
                 customer.Creator = User.Identity.Name;
                 db.Customers.Add(customer);
@@ -88,8 +93,11 @@ namespace SynWebCRM.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "CustomerId,CreationDate,Name,Source,Description,Phone,Email,VkId")] Customer customer)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid
+                && (string.IsNullOrEmpty(customer.VkId)
+                    || ParseHelper.IsVKValid(customer.VkId)))
             {
+                customer.VkId = ParseHelper.ParseVK(customer.VkId);
                 db.Entry(customer).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
