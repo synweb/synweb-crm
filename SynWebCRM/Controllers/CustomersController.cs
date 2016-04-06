@@ -56,11 +56,12 @@ namespace SynWebCRM.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "CustomerId,Name,Source,Description,Phone,Email,VkId")] Customer customer)
         {
-            if (ModelState.IsValid 
-                && (string.IsNullOrEmpty(customer.VkId)
-                    || ParseHelper.IsVKValid(customer.VkId)))
+            if (!string.IsNullOrEmpty(customer.VkId))
             {
                 customer.VkId = ParseHelper.ParseVK(customer.VkId);
+            }
+            if (ModelState.IsValid)
+            {
                 customer.CreationDate = DateTime.Now;
                 customer.Creator = User.Identity.Name;
                 db.Customers.Add(customer);
@@ -93,11 +94,12 @@ namespace SynWebCRM.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "CustomerId,CreationDate,Name,Source,Description,Phone,Email,VkId")] Customer customer)
         {
-            if (ModelState.IsValid
-                && (string.IsNullOrEmpty(customer.VkId)
-                    || ParseHelper.IsVKValid(customer.VkId)))
+            if (!string.IsNullOrEmpty(customer.VkId))
             {
                 customer.VkId = ParseHelper.ParseVK(customer.VkId);
+            }
+            if (ModelState.IsValid)
+            {
                 db.Entry(customer).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
