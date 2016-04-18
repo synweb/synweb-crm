@@ -15,7 +15,7 @@ namespace SynWebCRM.ApiControllers
         [HttpGet]
         public ICollection<DealModel> GetDeals()
         {
-            List<Deal> dataRes = db.Deals.ToList();
+            List<Deal> dataRes = db.Deals.OrderByDescending(x => x.NeedsAttention).ThenByDescending(x => x.CreationDate).ToList();
             var res = Mapper.Map<ICollection<DealModel>>(dataRes);
             return res;
         }
@@ -37,6 +37,7 @@ namespace SynWebCRM.ApiControllers
             public string Type { get; set; }
 
             public string DealState { get; set; }
+            public bool NeedsAttention { get; set; }
         }
 
         public class CustomerModel

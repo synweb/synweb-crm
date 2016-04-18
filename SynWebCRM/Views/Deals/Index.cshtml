@@ -1,6 +1,4 @@
-﻿@model IEnumerable<SynWebCRM.Data.Deal>
-
-@{
+﻿@{
     ViewBag.Title = "Заявки и сделки";
 }
 
@@ -27,7 +25,7 @@
 
     </tr>*@
     <tbody data-bind="foreach: deals">
-        <tr>
+        <tr  data-bind="css: { bold: needsAttention }">
             <td data-bind="text: creationDate"></td>
             <td><a data-bind="attr: {href: '/Customers/Details/'+customer.customerId}"><span data-bind="text: customer.name"></span></a></td>
             <td data-bind="text: sum"></td>

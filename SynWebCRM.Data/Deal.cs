@@ -27,6 +27,9 @@ namespace SynWebCRM.Data
 
         [Display(Name="Описание")]
         public string Description { get; set; }
+        
+        [Display(Name = "Требует внимания")]
+        public bool NeedsAttention { get; set; }
 
         [Required]
         [EnumDataType(typeof(DealType))]

@@ -32,10 +32,7 @@ namespace SynWebCRM.Controllers
         // GET: Deals
         public ActionResult Index()
         {
-            var deals = db.Deals
-                .Include(x => x.DealState)
-                .Include(d => d.Customer).OrderByDescending(x => x.CreationDate);
-            return View(deals);
+            return View();
         }
 
         // GET: Deals/Details/5
@@ -76,7 +73,7 @@ namespace SynWebCRM.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "DealId,Sum,CustomerId,Name,Description,Type,DealStateId")] Deal deal)
+        public ActionResult Create([Bind(Include = "DealId,Sum,CustomerId,Name,Description,Type,DealStateId,NeedsAttention")] Deal deal)
         {
             if (ModelState.IsValid)
             {
@@ -118,7 +115,7 @@ namespace SynWebCRM.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "DealId,CreationDate,Sum,CustomerId,Name,Description,Type,DealStateId")] Deal deal)
+        public ActionResult Edit([Bind(Include = "DealId,CreationDate,Sum,CustomerId,Name,Description,Type,DealStateId,NeedsAttention")] Deal deal)
         {
             if (ModelState.IsValid)
             {

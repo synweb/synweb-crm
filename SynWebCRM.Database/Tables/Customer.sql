@@ -4,6 +4,7 @@
 	[CreationDate] DATETIME NOT NULL DEFAULT GETDATE(),
 	[Name] NVARCHAR(300) NOT NULL,
 	[Source] int NOT NULL,
+	[NeedsAttention] bit NOT NULL DEFAULT 0,
 	[Description] NVARCHAR(MAX) NULL,
 	[Phone] NVARCHAR(100) NULL,
 	[Email] VARCHAR(100) NULL,

@@ -51,6 +51,9 @@ namespace SynWebCRM.Data
         [Display(Name="ID в VK")]
         public string VkId { get; set; }
 
+        [Display(Name="Требует внимания")]
+        public bool NeedsAttention { get; set; }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Deal> Deals { get; set; }
 

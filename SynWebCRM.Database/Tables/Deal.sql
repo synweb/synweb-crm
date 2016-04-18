@@ -8,6 +8,7 @@
 	[Description] NVARCHAR(MAX) NULL, 
     [Type] int NOT NULL, 
 	[DealStateId] INT NOT NULL DEFAULT 1,
+	[NeedsAttention] bit NOT NULL DEFAULT 0,
 	[Creator] NVARCHAR(256) NULL,
     CONSTRAINT [FK_Deal_Customer] FOREIGN KEY ([CustomerId]) REFERENCES [Customer]([CustomerId]) ON DELETE CASCADE, 
     CONSTRAINT [FK_Deal_State] FOREIGN KEY ([DealStateId]) REFERENCES [DealState]([DealStateId]),

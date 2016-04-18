@@ -18,7 +18,9 @@ namespace SynWebCRM.Controllers
     {
         private Model db = new Model();
 
-        private IQueryable<Customer> Customers => db.Customers.OrderByDescending(x => x.CreationDate);
+        private IQueryable<Customer> Customers => db.Customers
+            .OrderByDescending(x => x.NeedsAttention)
+            .ThenByDescending(x => x.CreationDate);
 
         // GET: Customers
         public ActionResult Index()
@@ -54,7 +56,7 @@ namespace SynWebCRM.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "CustomerId,Name,Source,Description,Phone,Email,VkId")] Customer customer)
+        public ActionResult Create([Bind(Include = "CustomerId,Name,Source,Description,Phone,Email,VkId,NeedsAttention")] Customer customer)
         {
             if (!string.IsNullOrEmpty(customer.VkId))
             {
@@ -92,7 +94,7 @@ namespace SynWebCRM.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "CustomerId,CreationDate,Name,Source,Description,Phone,Email,VkId")] Customer customer)
+        public ActionResult Edit([Bind(Include = "CustomerId,CreationDate,Name,Source,Description,Phone,Email,VkId,NeedsAttention")] Customer customer)
         {
             if (!string.IsNullOrEmpty(customer.VkId))
             {

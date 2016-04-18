@@ -34,7 +34,7 @@
     </tr>
 
 @foreach (var item in Model) {
-    <tr>
+    <tr @(item.NeedsAttention?"class=bold":"")>
         <td>
             @Html.DisplayFor(modelItem => item.CreationDate)
         </td>
