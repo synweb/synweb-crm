@@ -119,7 +119,7 @@
 
                 @foreach (var item in deals)
                 {
-                    <tr>
+                    <tr @( item.NeedsAttention ?"class=bold":"")>
                         <td>
                             @Html.DisplayFor(modelItem => item.CreationDate)
                         </td>
