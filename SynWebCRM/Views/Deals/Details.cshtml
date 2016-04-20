@@ -1,4 +1,5 @@
-﻿@model SynWebCRM.Data.Deal
+﻿@using SynWebCRM.Models
+@model SynWebCRM.Data.Deal
 
 @{
     ViewBag.Title = "Сделка";
@@ -8,7 +9,7 @@
 
 <div>
     <h4>Сделка</h4>
-    <hr />
+    <hr/>
     <dl class="dl-horizontal">
         <dt>
             @Html.DisplayNameFor(model => model.Customer.Name)
@@ -86,6 +87,11 @@
 
     </dl>
 </div>
+
+
+@Html.Partial("_NoteList", Model.Notes)
+@Html.Partial("_NewNote", new NewNoteModel("/api/deals/notes/add", Model.DealId))
+
 <p>
     @Html.ActionLink("Редактировать", "Edit", new { id = Model.DealId }) |
     @Html.ActionLink("Назад к списку", "Index")

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Http;
+using SynWebCRM.ApiControllers.Models;
 using SynWebCRM.Data;
 using SynWebCRM.Models;
 
@@ -12,7 +13,7 @@ namespace SynWebCRM.ApiControllers
     {
         Model db = new Model();
 
-        public ResultModel AddNote(AddNoteData note)
+        public ResultModel AddNote(AddNoteData<int> note)
         {
             try
             {
@@ -22,7 +23,7 @@ namespace SynWebCRM.ApiControllers
                     CreationDate = DateTime.Now,
                     Creator = User.Identity.Name
                 };
-                var cust = new Customer() {CustomerId = note.CustomerId};
+                var cust = new Customer() {CustomerId = note.TargetId};
                 db.Customers.Attach(cust);
                 newNote.Customers.Add(cust);
                 db.Notes.Add(newNote);
@@ -33,12 +34,6 @@ namespace SynWebCRM.ApiControllers
             {
                 return new ResultModel(e);
             }
-        }
-
-        public class AddNoteData
-        {
-            public int CustomerId { get; set; }
-            public string Text { get; set; }
         }
     }
 }

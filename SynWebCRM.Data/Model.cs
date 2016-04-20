@@ -64,6 +64,18 @@ namespace SynWebCRM.Data
                             cs.MapRightKey("NoteId");
                             cs.ToTable("Note_Customer");
                         });
+
+
+
+            modelBuilder.Entity<Deal>()
+                        .HasMany<Note>(s => s.Notes)
+                        .WithMany(c => c.Deals)
+                        .Map(cs =>
+                        {
+                            cs.MapLeftKey("DealId");
+                            cs.MapRightKey("NoteId");
+                            cs.ToTable("Note_Deal");
+                        });
         }
     }
 }

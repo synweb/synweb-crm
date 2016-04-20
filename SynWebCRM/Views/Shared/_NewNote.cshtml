@@ -1,0 +1,8 @@
+﻿@model SynWebCRM.Models.NewNoteModel
+
+<div class="new-note">
+    <h4>Новая заметка</h4>
+    <textarea class="new-note-text form-control"></textarea>
+    <button type="button" class="btn btn-default" onclick="createNote('@Model.AddUrl', @Model.TargetId)"><i class="fa fa-plus"></i>&nbsp;Добавить</button>
+</div>
+

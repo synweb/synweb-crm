@@ -18,6 +18,7 @@ namespace SynWebCRM
 
 
             WebApiConfigHelper.ApiRoute(config.Routes, "deals/get", "DealsApi", "GetDeals");
+            WebApiConfigHelper.ApiRoute(config.Routes, "deals/notes/add", "DealsApi", "AddNote");
 
             WebApiConfigHelper.ApiRoute(config.Routes, "calendar/events/get", "CalendarApi", "GetEvents");
             WebApiConfigHelper.ApiRoute(config.Routes, "calendar/event/create", "CalendarApi", "CreateEvent");

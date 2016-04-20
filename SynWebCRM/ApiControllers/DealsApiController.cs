@@ -4,7 +4,9 @@ using System.Linq;
 using System.Web;
 using System.Web.Http;
 using AutoMapper;
+using SynWebCRM.ApiControllers.Models;
 using SynWebCRM.Data;
+using SynWebCRM.Models;
 
 namespace SynWebCRM.ApiControllers
 {
@@ -20,30 +22,28 @@ namespace SynWebCRM.ApiControllers
             return res;
         }
 
-        public class DealModel
+
+        public ResultModel AddNote(AddNoteData<int> note)
         {
-            public int DealId { get; set; }
-
-            public string CreationDate { get; set; }
-
-            public decimal? Sum { get; set; }
-
-            public CustomerModel Customer { get; set; }
-
-            public string Name { get; set; }
-
-            public string Description { get; set; }
-
-            public string Type { get; set; }
-
-            public string DealState { get; set; }
-            public bool NeedsAttention { get; set; }
-        }
-
-        public class CustomerModel
-        {
-            public int CustomerId { get; set; }
-            public string Name { get; set; }
+            try
+            {
+                var newNote = new Note
+                {
+                    Text = note.Text,
+                    CreationDate = DateTime.Now,
+                    Creator = User.Identity.Name
+                };
+                var deal = new Deal() { DealId = note.TargetId };
+                db.Deals.Attach(deal);
+                newNote.Deals.Add(deal);
+                db.Notes.Add(newNote);
+                db.SaveChanges();
+                return new ResultModel(true, newNote.NoteId);
+            }
+            catch (Exception e)
+            {
+                return new ResultModel(e);
+            }
         }
     }
 }

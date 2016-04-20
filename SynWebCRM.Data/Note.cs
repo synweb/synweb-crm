@@ -13,6 +13,7 @@ namespace SynWebCRM.Data
         public Note()
         {
             Customers=new HashSet<Customer>();
+            Deals=new HashSet<Deal>();
         }
 
         public int NoteId { get; set; }
@@ -23,5 +24,6 @@ namespace SynWebCRM.Data
         public string Creator { get; set; }
 
         public ICollection<Customer> Customers { get; set; }
+        public ICollection<Deal> Deals { get; set; }
     }
 }

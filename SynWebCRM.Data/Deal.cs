@@ -9,6 +9,10 @@ namespace SynWebCRM.Data
     [Table("Deal")]
     public partial class Deal
     {
+        public Deal()
+        {
+            Notes = new HashSet<Note>();
+        }
         public int DealId { get; set; }
 
         [Display(Name="Дата создания", AutoGenerateField = true)]
@@ -48,5 +52,6 @@ namespace SynWebCRM.Data
         public virtual Customer Customer { get; set; }
         [Display(Name = "Создатель")]
         public string Creator { get; set; }
+        public virtual ICollection<Note> Notes { get; set; }
     }
 }

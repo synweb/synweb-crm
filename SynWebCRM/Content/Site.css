@@ -34,3 +34,7 @@ textarea.form-control{
 .bold {
     font-weight: 600;
 }
+
+.new-note button{
+    margin-top:10px;
+}
