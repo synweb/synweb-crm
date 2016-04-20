@@ -69,21 +69,22 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dt>
             @Html.DisplayNameFor(model => model.NeedsAttention)
         </dt>
         <dd>
             @Html.DisplayFor(model => model.NeedsAttention)
         </dd>
 
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
         <dd>
             @if (Model.Description != null)
             {
                 @Html.Raw(Model.Description.Replace(Environment.NewLine, "<br />"))
             }
         </dd>
+
 
     </dl>
 </div>
