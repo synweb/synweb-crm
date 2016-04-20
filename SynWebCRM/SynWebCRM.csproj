@@ -213,6 +213,7 @@
     <Compile Include="Controllers\CalendarController.cs" />
     <Compile Include="Controllers\CustomersController.cs" />
     <Compile Include="Controllers\DealsController.cs" />
+    <Compile Include="Controllers\EstimatesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\WebsitesController.cs" />
@@ -328,6 +329,9 @@
     <Content Include="Views\Calendar\DeleteEvent.cshtml" />
     <Content Include="Views\Shared\_NewNote.cshtml" />
     <Content Include="Views\Shared\_NoteList.cshtml" />
+    <Content Include="Views\Estimates\Edit.cshtml" />
+    <Content Include="Views\Estimates\View.cshtml" />
+    <Content Include="Views\Estimates\_EstimateLayout.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

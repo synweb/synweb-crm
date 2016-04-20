@@ -85,7 +85,21 @@
             }
         </dd>
 
-
+        <dt>
+            @Html.DisplayNameFor(model => model.Estimates)
+        </dt>
+        <dd>
+            @if (Model.Estimates.Any())
+            {
+                foreach (var estimate in Model.Estimates)
+                {
+                    <div>
+                        <a href="/Estimates/Edit/@estimate.EstimateId">@estimate.Guid</a>
+                    </div>
+                }
+            }
+            <div><a href="/Estimates/Create/@Model.DealId">Создать</a></div>
+        </dd>
     </dl>
 </div>
 

@@ -53,5 +53,8 @@ namespace SynWebCRM.Data
         [Display(Name = "Создатель")]
         public string Creator { get; set; }
         public virtual ICollection<Note> Notes { get; set; }
+
+        [Display(Name = "Сметы")]
+        public virtual ICollection<Estimate> Estimates { get; set; }
     }
 }

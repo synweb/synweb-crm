@@ -1,0 +1,42 @@
+﻿@model SynWebCRM.Data.Estimate
+
+@{
+    ViewBag.Title = "Смета на разработку";
+    if (!User.Identity.IsAuthenticated)
+    {
+        Layout = "_EstimateLayout.cshtml";
+    }
+}
+
+<h2>@Model.Deal.Name</h2>
+
+@if (Model.Items.Any())
+{
+    <table class="table">
+        <tr>
+            <th>Название</th>
+            <th>Цена, <i class="fa fa-rub"></i></th>
+            <th>Часы</th>
+        </tr>
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td>@item.Price.ToString("# ##0.00")</td>
+                <td>@item.Name</td>
+            </tr>
+        }
+    </table>
+}
+
+<dl>
+    @if (Model.Discount.HasValue)
+    {
+        <dt>
+            @Html.DisplayNameFor(model => model.Discount)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Discount) %
+        </dd>
+    }
+</dl>

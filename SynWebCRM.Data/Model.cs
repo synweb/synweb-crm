@@ -37,9 +37,9 @@ namespace SynWebCRM.Data
                 .WithRequired(e => e.Customer)
                 .WillCascadeOnDelete(false);
 
-            modelBuilder.Entity<Customer>()
+            modelBuilder.Entity<Deal>()
                 .HasMany(e => e.Estimates)
-                .WithRequired(e => e.Customer)
+                .WithRequired(e => e.Deal)
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<Customer>()
@@ -53,6 +53,17 @@ namespace SynWebCRM.Data
             //     .WithRequired(x => x.DealState)
             //     .HasForeignKey(x => x.DealStateId)
             //     .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<Estimate>()
+                .HasMany(e => e.Items)
+                .WithRequired(x => x.Estimate)
+                //.Map(x =>
+                //{
+                //    x.MapKey("EstimateId");
+                //    x.ToTable("Estimate");
+                //})
+                //.WillCascadeOnDelete(true);
+                .HasForeignKey(x => x.EstimateId);
 
 
             modelBuilder.Entity<Customer>()
