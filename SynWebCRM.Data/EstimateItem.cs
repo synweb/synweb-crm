@@ -29,5 +29,7 @@ namespace SynWebCRM.Data
         public bool IsOptional { get; set; }
 
         public int SortOrder { get; set; }
+
+        public Estimate Estimate { get; set; }
     }
 }

@@ -8,5 +8,6 @@
 	[Price] DECIMAL(18,2) NOT NULL,
 	[DevelopmentHours] FLOAT NULL,
 	[IsOptional] BIT NOT NULL DEFAULT 0,
-	[SortOrder] INT NOT NULL DEFAULT 0
+	[SortOrder] INT NOT NULL DEFAULT 0, 
+    CONSTRAINT [FK_EstimateItem_Estimate] FOREIGN KEY ([EstimateId]) REFERENCES [Estimate]([EstimateId])
 )
