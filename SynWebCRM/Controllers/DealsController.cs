@@ -115,7 +115,7 @@ namespace SynWebCRM.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "DealId,CreationDate,Sum,CustomerId,Name,Description,Type,DealStateId,NeedsAttention")] Deal deal)
+        public ActionResult Edit([Bind(Include = "DealId,Creator,CreationDate,Sum,CustomerId,Name,Description,Type,DealStateId,NeedsAttention")] Deal deal)
         {
             if (ModelState.IsValid)
             {
