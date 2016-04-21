@@ -38,3 +38,24 @@ textarea.form-control{
 .new-note button{
     margin-top:10px;
 }
+
+.estimate-item-row{
+    margin-bottom:5px;
+    margin-top:5px;
+}
+
+.mb10{
+    margin-bottom: 10px;
+}
+
+.strikethrough{
+    text-decoration: line-through;
+}
+
+.nowrap{
+    white-space: nowrap;
+}
+
+.estimate-text{
+    min-height:500px;
+}

@@ -8,35 +8,61 @@
     }
 }
 
-<h2>@Model.Deal.Name</h2>
+<h1>@Model.Title</h1>
+<h2>Смета на разработку</h2>
 
 @if (Model.Items.Any())
 {
     <table class="table">
         <tr>
-            <th>Название</th>
+            <th></th>
             <th>Цена, <i class="fa fa-rub"></i></th>
             <th>Часы</th>
+            <th class="text-left">Комментарий</th>
         </tr>
         @foreach (var item in Model.Items)
         {
             <tr>
                 <td>@item.Name</td>
-                <td>@item.Price.ToString("# ##0.00")</td>
-                <td>@item.Name</td>
+                <td class="text-center nowrap">@item.Price.ToString("# ##0.00")</td>
+                <td class="text-center">@item.DevelopmentHours</td>
+                <td>@item.Description</td>
             </tr>
         }
     </table>
 }
 
-<dl>
-    @if (Model.Discount.HasValue)
-    {
-        <dt>
-            @Html.DisplayNameFor(model => model.Discount)
+<div>
+
+    <dl class="dl-horizontal" style="font-size: 18px;">
+        <dt @(Model.Discount.HasValue ? "class=bold" : "")>
+            Итог
         </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Discount) %
+        <dd class="strikethrough">
+            @Model.Total.ToString("# ##0.00") <i class="fa fa-rub"></i>
         </dd>
-    }
-</dl>
+        @if (Model.Discount.HasValue)
+        {
+            <dt>
+                Скидка
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Discount)%
+            </dd>
+
+            <dt>
+                Итог со скидкой
+            </dt>
+            <dd class="bold">
+                @((Model.Total*(decimal) (1 - Model.Discount.Value/100.0)).ToString("# ##0.00")) <i class="fa fa-rub"></i>
+            </dd>
+        }
+    </dl>
+</div>
+
+@if (!string.IsNullOrWhiteSpace(Model.Text))
+{
+    <div>
+        @Html.Raw(Model.Text)
+    </div>
+}

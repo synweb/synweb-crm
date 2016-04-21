@@ -21,7 +21,8 @@ namespace SynWebCRM.Controllers
                 Guid = Guid.NewGuid(),
                 CreationDate = DateTime.Now,
                 Creator = User.Identity.Name,
-                DealId = id
+                DealId = id,
+                HourlyRate = 1500 //TODO: в конфиг
             };
             db.Estimates.Add(model);
             db.SaveChanges();
@@ -42,7 +43,7 @@ namespace SynWebCRM.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "EstimateId,CreationDate,Guid,DealId,Creator,Discount,Total")] Estimate estimate)
+        public ActionResult Edit([Bind(Include = "EstimateId,CreationDate,Guid,DealId,Creator,Discount,Total,HourlyRate")] Estimate estimate)
         {
             if (ModelState.IsValid)
             {

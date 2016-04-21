@@ -30,6 +30,6 @@ namespace SynWebCRM.Data
 
         public int SortOrder { get; set; }
 
-        public Estimate Estimate { get; set; }
+        //public Estimate Estimate { get; set; }
     }
 }

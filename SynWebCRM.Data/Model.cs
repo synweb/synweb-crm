@@ -54,16 +54,16 @@ namespace SynWebCRM.Data
             //     .HasForeignKey(x => x.DealStateId)
             //     .WillCascadeOnDelete(false);
 
-            modelBuilder.Entity<Estimate>()
-                .HasMany(e => e.Items)
-                .WithRequired(x => x.Estimate)
-                //.Map(x =>
-                //{
-                //    x.MapKey("EstimateId");
-                //    x.ToTable("Estimate");
-                //})
-                //.WillCascadeOnDelete(true);
-                .HasForeignKey(x => x.EstimateId);
+            //modelBuilder.Entity<Estimate>()
+            //    .HasMany(e => e.Items)
+            //    .WithRequired(x => x.Estimate)
+            //    //.Map(x =>
+            //    //{
+            //    //    x.MapKey("EstimateId");
+            //    //    x.ToTable("Estimate");
+            //    //})
+            //    //.WillCascadeOnDelete(true);
+            //    .HasForeignKey(x => x.EstimateId);
 
 
             modelBuilder.Entity<Customer>()

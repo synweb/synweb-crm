@@ -28,6 +28,10 @@ namespace SynWebCRM
 
             WebApiConfigHelper.ApiRoute(config.Routes, "note/{id}/delete", "NotesApi", "DeleteNote");
 
+            WebApiConfigHelper.ApiRoute(config.Routes, "estimates/{id}/get", "EstimatesApi", "GetEstimate");
+            WebApiConfigHelper.ApiRoute(config.Routes, "estimates/update", "EstimatesApi", "UpdateEstimate");
+
+
         }
     }
 }

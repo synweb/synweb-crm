@@ -2,54 +2,170 @@
 @model SynWebCRM.Data.Estimate
 
 @{
-    ViewBag.Title = "Создание сметы";
+    ViewBag.Title = "Смета #"+Model.EstimateId;
     Deal deal = ViewBag.Deal;
+    var clientUrl = HttpContext.Current.Request.Url.Scheme + "://" + HttpContext.Current.Request.Url.Authority + "/Estimates/View/" + Model.Guid;
 }
 
 <h2>@ViewBag.Title</h2>
 <h3>Сделка &laquo;@deal.Name&raquo;</h3>
+<span>Ссылка для клиента: <a target="_blank" href="@clientUrl">@clientUrl</a></span>
+<hr/>
 
-
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
-
-    <div class="form-horizontal">
-        <h4>Смета</h4>
-        <hr />
-
-        @Html.HiddenFor(model => model.EstimateId, new { htmlAttributes = new { @class = "form-control" } })
-        @Html.HiddenFor(model => model.CreationDate, new { htmlAttributes = new { @class = "form-control" } })
-        @Html.HiddenFor(model => model.Guid, new { htmlAttributes = new { @class = "form-control" } })
-        @Html.HiddenFor(model => model.DealId, new { htmlAttributes = new { @class = "form-control" } })
-        @Html.HiddenFor(model => model.Creator, new { htmlAttributes = new { @class = "form-control" } })
+    <div class="form-horizontal" data-bind="with: estimate">
 
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Total, htmlAttributes: new { @class = "control-label col-md-2" })
+            <label class="control-label col-md-2" for="title">Заголовок</label>
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Total, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Total, "", new { @class = "text-danger" })
-            </div>
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(model => model.Discount, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Discount, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Discount, "", new { @class = "text-danger" })
+                <input class="form-control text-box single-line" type="text" id="title" data-bind="value: title">
             </div>
         </div>
 
+        <div class="form-group">
+            <label class="control-label col-md-2" for="hourlyRate">Почасовая ставка</label>
+            <div class="col-md-10">
+                <input class="form-control text-box single-line" type="text" id="hourlyRate" data-bind="value: hourlyRate">
+            </div>
+        </div>
+
+        <h3>Пункты</h3>
+        <div class="form-group">
+            <div class="col-md-12">
+                <div class="estimate-items">
+                    <div class="row bold">
+                        <div class="col-xs-3">
+                            <div class="form-control-static">Название</div>
+                        </div>
+                        <div class="col-xs-2">
+                            <div class="form-control-static">Цена, <i class="fa fa-rub"></i>
+                            </div>
+                        </div>
+                        <div class="col-xs-2">
+                            <div class="form-control-static">Часы</div>
+                        </div>
+                        <div class="col-xs-4">
+                            <div class="form-control-static">Комментарий</div>
+                        </div>
+                        <div></div>
+                    </div>
+                    <div data-bind="foreach: items">
+                        <div class="row estimate-item-row">
+                            <div class="col-xs-3">
+                                <input type="text" class="form-control" data-bind="value: name"/>
+                            </div>
+                            <div class="col-xs-2">
+                                <input type="number" name="price" class="form-control" data-val="true" data-val-number="Must be a number." step="100" data-bind="value: price"/>
+                            </div>
+                            <div class="col-xs-2">
+                                <input type="number" name="hours" class="form-control" data-val="true" data-val-number="Must be a number." data-bind="value: developmentHours"/>
+                            </div>
+                            <div class="col-xs-4">
+                                <input type="text" name="hours" class="form-control" data-bind="value: description" />
+                            </div>
+                            <div class="col-xs-1">
+                                <div class="form-control-static">
+                                    <a class="remove-estimate-item" data-bind="click: $parent.removeItem"><i class="fa fa-trash-o"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <button class="btn btn-link" data-bind="click: addItem"><i class="fa fa-plus"></i></button>
+            </div>
+        </div>
 
 
         <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Сохранить" class="btn btn-default" />
+            <label class="control-label col-md-2" for="total">Итог без скидки</label>
+            <div class="col-md-2">
+                @*<input class="form-control text-box single-line" id="total" type="text" data-bind="value: total">
+                <span class="field-validation-valid text-danger" data-valmsg-for="total" data-valmsg-replace="true"></span>*@
+                <div class="form-control-static"><span data-bind="text: total"></span>&nbsp;<i class="fa fa-rub"></i></div>
+            </div>
+            <label class="control-label col-md-2" for="discount">Скидка, %</label>
+            <div class="col-md-2">
+                <input class="form-control text-box single-line" id="discount" type="number" data-bind="value: discount">
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label class="control-label col-md-2">Итог со скидкой</label>
+            <div class="col-md-10">
+                <div class="form-control-static"><span data-bind="text: totalAfterDiscount"></span>&nbsp;<i class="fa fa-rub"></i>
+                </div>
+
+            </div>
+        </div>
+        <div class="row mb10">
+            <div class="col-sm-12">
+                <h3>Текст</h3>
+                <textarea class="estimate-text" data-bind="wysiwyg: text"></textarea>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-10">
+                <input type="button" value="Сохранить" class="btn btn-default" data-bind="click: $root.save"/>
             </div>
         </div>
     </div>
-}
 
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}
+<div id="templates" style="display: none;">
+    <div id="rowTemplate" class="row estimate-item-row">
+        <div class="col-xs-6 name"><input type="text" class="form-control"/></div>
+        <div class="col-xs-2 price"><input type="number" name="price" class="form-control" data-val="true" data-val-number="Must be a number." step="100"/></div>
+        <div class="col-xs-2 hours"><input type="number" name="hours" class="form-control" data-val="true" data-val-number="Must be a number." /></div>
+        <div class="col-xs-2">
+            <div class="form-control-static">
+                @*<a href="#"><i class="fa fa-check"></i></a>&nbsp;|&nbsp;*@
+                <a class="remove-estimate-item" onclick="false"><i class="fa fa-trash-o"></i></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+
+        <script>
+
+            $(function() {
+
+
+                var viewModel = {
+                    estimate: ko.observable(),
+                    save: function() {
+                        var obj = JSON.parse(ko.toJSON(viewModel.estimate()));
+                        var url = "/api/estimates/update";
+                        $.post(url, obj, function(res) {
+                            if (res.succeed) {
+                                alert("Смета сохранена");
+                            } else {
+                                alert("Ошибка при сохранении");
+                            }
+                        });
+                    },
+                    load: function() {
+                        $.getJSON('/api/estimates/' + @Model.EstimateId + '/get', null, function(res) {
+                            if (res.succeed) {
+                                var est = new App.Estimate(res.data);
+                                viewModel.estimate(est);
+                            }
+                        });
+                    }
+                };
+
+                viewModel.load();
+
+                ko.applyBindings(viewModel);
+            });
+
+        </script>
+        
+
+
+    }

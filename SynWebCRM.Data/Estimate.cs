@@ -30,10 +30,17 @@ namespace SynWebCRM.Data
         [Display(Name = "Итог без скидки")]
         public decimal Total { get; set; }
 
+        [Display(Name = "Часовая ставка")]
+        public decimal HourlyRate { get; set; }
+
         public virtual Deal Deal { get; set; }
         [Display(Name = "Создатель")]
         public string Creator { get; set; }
 
+        public string Title { get; set; }
+        public string Text { get; set; }
+
+        [Display(Name = "Пункты")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<EstimateItem> Items { get; set; } 
     }

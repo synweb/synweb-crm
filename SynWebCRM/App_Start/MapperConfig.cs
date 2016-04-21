@@ -24,6 +24,9 @@ namespace SynWebCRM
                     .ForMember(x => x.Type, x => x.MapFrom(y => y.Type == DealType.Incoming ? "Входящая" : "Исходящая"))
                     .ForMember(x => x.Customer, x => x.MapFrom(y => new CustomerModel {CustomerId = y.Customer.CustomerId, Name = y.Customer.Name} ))
                     ;
+
+                cfg.CreateMap<Estimate, EstimateModel>();
+
             });
         }
     }
