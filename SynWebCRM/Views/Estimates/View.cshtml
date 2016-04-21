@@ -8,8 +8,47 @@
     }
 }
 
+<link href='/Content/estimate.print.css' rel='stylesheet' media='print' />
+
+<style>
+    h1{
+        margin-top:0;
+    }
+
+    .estimate-logo {
+        margin: 20px;
+        white-space: nowrap;
+    }
+
+    .estimate-logo:hover{
+        text-decoration: none;
+    }
+
+        .estimate-logo span {
+            margin-left: 10px;
+            color: #000;
+            font-size: 30px;
+            font-weight: 400;
+            vertical-align: middle;
+            letter-spacing: 1px;
+        }
+</style>
+
+
+<div class="pull-right">
+
+
+    <a href="http://synweb.ru/" class="estimate-logo">
+        <img src="http://synweb.ru/Content/clientTemplate/images/logo-35.png" alt="SynWeb - разработка сайтов на заказ">
+        <span>СИНВЕБ</span>
+    </a>
+
+
+</div>
+
 <h1>@Model.Title</h1>
 <h2>Смета на разработку</h2>
+
 
 @if (Model.Items.Any())
 {
@@ -31,6 +70,16 @@
         }
     </table>
 }
+
+
+@if (!string.IsNullOrWhiteSpace(Model.Text))
+{
+    <div>
+        @Html.Raw(Model.Text)
+    </div>
+}
+
+
 
 <div>
 
@@ -54,15 +103,10 @@
                 Итог со скидкой
             </dt>
             <dd class="bold">
-                @((Model.Total*(decimal) (1 - Model.Discount.Value/100.0)).ToString("# ##0.00")) <i class="fa fa-rub"></i>
+                @((Model.Total * (decimal)(1 - Model.Discount.Value / 100.0)).ToString("# ##0.00")) <i class="fa fa-rub"></i>
             </dd>
         }
     </dl>
 </div>
 
-@if (!string.IsNullOrWhiteSpace(Model.Text))
-{
-    <div>
-        @Html.Raw(Model.Text)
-    </div>
-}
+<small class="hidden-print">Чтобы распечатать смету, нажмите Ctrl+P</small>

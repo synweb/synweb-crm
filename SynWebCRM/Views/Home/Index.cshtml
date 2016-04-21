@@ -10,68 +10,71 @@
     @*<p><a href="http://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>*@
 </div>
 
-<div class="row">
-    <div class="col-md-12">
-        <h2>Статистика за @DateTime.Now.Year год</h2>
-        <table class="table text-center">
-            <tr>
-                <th>
-                    Месяц
-                </th>
-                <th>
-                    Новых лиц в картотеке
-                </th>
-                <th>
-                    Исходящих заявок
-                </th>
-                <th>
-                    Входящих заявок
-                </th>
-                <th>
-                    Выполненных заказов
-                </th>
-            </tr>
 
-            @foreach (var item in Model.Funnel)
-            {
+@if (User.Identity.IsAuthenticated)
+{
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Статистика за @DateTime.Now.Year год</h2>
+            <table class="table text-center">
+                <tr>
+                    <th>
+                        Месяц
+                    </th>
+                    <th>
+                        Новых лиц в картотеке
+                    </th>
+                    <th>
+                        Исходящих заявок
+                    </th>
+                    <th>
+                        Входящих заявок
+                    </th>
+                    <th>
+                        Выполненных заказов
+                    </th>
+                </tr>
+
+                @foreach (var item in Model.Funnel)
+                {
+                    <tr>
+                        <td>
+                            @item.Month
+                        </td>
+                        <td>
+                            @item.NewCustomers
+                        </td>
+                        <td>
+                            @item.NewOutcomingRequests
+                        </td>
+                        <td>
+                            @item.NewIncomingRequests
+                        </td>
+                        <td>
+                            @item.CompletedDeals
+                        </td>
+                    </tr>
+                }
                 <tr>
                     <td>
-                        @item.Month
+                        <strong>Итог</strong>
                     </td>
                     <td>
-                        @item.NewCustomers
+                        <strong>@Model.Customers</strong>
                     </td>
                     <td>
-                        @item.NewOutcomingRequests
+                        <strong>@Model.OutcomingRequests</strong>
                     </td>
                     <td>
-                        @item.NewIncomingRequests
+                        <strong>@Model.IncomingRequests</strong>
                     </td>
                     <td>
-                        @item.CompletedDeals
+                        <strong>@Model.CompletedDeals</strong>
                     </td>
                 </tr>
-            }
-            <tr>
-                <td>
-                    <strong>Итог</strong>
-                </td>
-                <td>
-                    <strong>@Model.Customers</strong>
-                </td>
-                <td>
-                    <strong>@Model.OutcomingRequests</strong>
-                </td>
-                <td>
-                    <strong>@Model.IncomingRequests</strong>
-                </td>
-                <td>
-                    <strong>@Model.CompletedDeals</strong>
-                </td>
-            </tr>
-        </table>
+            </table>
+        </div>
     </div>
-
-
-
-</div>
+}else{
+    <h3>Похоже, вам <a href="http://synweb.ru">сюда</a></h3>
+}
