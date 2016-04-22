@@ -144,6 +144,7 @@
                         $.post(url, obj, function(res) {
                             if (res.succeed) {
                                 alert("Смета сохранена");
+                                viewModel.load();
                             } else {
                                 alert("Ошибка при сохранении");
                             }

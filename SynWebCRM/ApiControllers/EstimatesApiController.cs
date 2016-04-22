@@ -10,7 +10,7 @@ using SynWebCRM.Security;
 
 namespace SynWebCRM.ApiControllers
 {
-    [System.Web.Mvc.Authorize(Roles = Roles.Admin + "," + Roles.Sales)]
+    [System.Web.Mvc.Authorize(Roles = CRMRoles.Admin + "," + CRMRoles.Sales)]
     public class EstimatesApiController : ApiController
     {
 
@@ -36,6 +36,8 @@ namespace SynWebCRM.ApiControllers
 
             try
             {
+                estimate.Items = estimate.Items.Where(x => !string.IsNullOrEmpty(x.Name)).ToList();
+
                 foreach(var item in estimate.Items)
                 {
                     if (item.EstimateId == 0)
@@ -50,6 +52,14 @@ namespace SynWebCRM.ApiControllers
                         db.Entry(item).State = EntityState.Modified;
                     }
                 }
+                var itemsForDelete =
+                    db.EstimateItems.Where(x => x.EstimateId == estimate.EstimateId).ToList()
+                        .Where(x => estimate.Items.All(y => y.ItemId != x.ItemId)).ToList();
+                foreach (var item in itemsForDelete)
+                {
+                    db.EstimateItems.Remove(item);
+                }
+
                 db.Estimates.Attach(estimate);
                 db.Entry(estimate).State = EntityState.Modified;
                 db.SaveChanges();

@@ -11,7 +11,7 @@
                 <div class="panel panel-success" id="note@(note.NoteId)">
 
                     <div class="panel-heading">
-                        @if (User.IsInRole(SynWebCRM.Security.Roles.Admin) || User.Identity.Name.Equals(note.Creator))
+                        @if (User.IsInRole(SynWebCRM.Security.CRMRoles.Admin) || User.Identity.Name.Equals(note.Creator))
                         {
                             <div class="pull-right">
                                 <a class="text-warning" onclick="deleteNote(@note.NoteId)"><i class="fa fa-trash-o"></i></a>

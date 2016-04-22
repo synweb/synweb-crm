@@ -25,7 +25,7 @@ namespace SynWebCRM.Data
         public int DealId { get; set; }
 
         [Display(Name = "Скидка")]
-        public int? Discount { get; set; }
+        public int Discount { get; set; }
 
         [Display(Name = "Итог без скидки")]
         public decimal Total { get; set; }

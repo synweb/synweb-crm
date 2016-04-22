@@ -11,7 +11,7 @@ using SynWebCRM.Security;
 
 namespace SynWebCRM.Controllers
 {
-    [Authorize(Roles = Roles.Admin)]
+    [Authorize(Roles = CRMRoles.Admin)]
     public class WebsitesController : Controller
     {
         private Model db = new Model();

@@ -28,19 +28,19 @@
 
                     @if (User.Identity.IsAuthenticated)
                     {
-                        if (User.IsInRole(SynWebCRM.Security.Roles.Admin) || User.IsInRole(SynWebCRM.Security.Roles.Sales))
+                        if (User.IsInRole(SynWebCRM.Security.CRMRoles.Admin) || User.IsInRole(SynWebCRM.Security.CRMRoles.Sales))
                         {
                         <li>@Html.ActionLink("Клиенты", "Index", "Customers")</li>
                         }
-                        if (User.IsInRole(SynWebCRM.Security.Roles.Admin) || User.IsInRole(SynWebCRM.Security.Roles.Sales))
+                        if (User.IsInRole(SynWebCRM.Security.CRMRoles.Admin) || User.IsInRole(SynWebCRM.Security.CRMRoles.Sales))
                         {
                         <li>@Html.ActionLink("Заявки и сделки", "Index", "Deals")</li>
                         }
-                        if (User.IsInRole(SynWebCRM.Security.Roles.Admin))
+                        if (User.IsInRole(SynWebCRM.Security.CRMRoles.Admin))
                         {
                             <li>@Html.ActionLink("Сайты", "Index", "Websites")</li>
                         }
-                        if (User.IsInRole(SynWebCRM.Security.Roles.Admin))
+                        if (User.IsInRole(SynWebCRM.Security.CRMRoles.Admin))
                         {
                             <li>@Html.ActionLink("Календарь", "Index", "Calendar")</li>
                         }

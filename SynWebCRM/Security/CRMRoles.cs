@@ -5,7 +5,7 @@ using System.Web;
 
 namespace SynWebCRM.Security
 {
-    public static class Roles
+    public static class CRMRoles
     {
         public const string Admin = "Admin";
         public const string Sales = "Sales";

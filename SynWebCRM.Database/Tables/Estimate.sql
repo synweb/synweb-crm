@@ -6,7 +6,7 @@
 	[Title] NVARCHAR(200) NULL,
 	[Text] NVARCHAR(MAX) NULL,
 	[DealId] INT NOT NULL,
-	[Discount] INT NULL,
+	[Discount] INT NOT NULL DEFAULT 0,
 	[HourlyRate] DECIMAL(18,2) NOT NULL DEFAULT 0,
 	[Total] DECIMAL(18,2) NOT NULL,
 	[Creator] NVARCHAR(256) NULL,

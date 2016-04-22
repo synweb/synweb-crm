@@ -18,7 +18,7 @@ namespace SynWebCRM.ApiControllers
         {
             var note = db.Notes.Find(id);
             if (!(User.Identity.Name == note.Creator
-                  || User.IsInRole(Roles.Admin)))
+                  || User.IsInRole(CRMRoles.Admin)))
                 return ResultModel.Error;
             db.Notes.Remove(note);
             db.SaveChanges();

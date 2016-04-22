@@ -1,4 +1,5 @@
-﻿@model SynWebCRM.Data.Estimate
+﻿@using SynWebCRM.Security
+@model SynWebCRM.Data.Estimate
 
 @{
     ViewBag.Title = "Смета на разработку";
@@ -84,13 +85,13 @@
 <div>
 
     <dl class="dl-horizontal" style="font-size: 18px;">
-        <dt @(Model.Discount.HasValue ? "class=bold" : "")>
+        <dt @(Model.Discount != 0 ? "class=bold" : "")>
             Итог
         </dt>
-        <dd class="strikethrough">
+        <dd @(Model.Discount != 0 ? "class=strikethrough" : "")>
             @Model.Total.ToString("# ##0.00") <i class="fa fa-rub"></i>
         </dd>
-        @if (Model.Discount.HasValue)
+        @if (Model.Discount != 0)
         {
             <dt>
                 Скидка
@@ -103,10 +104,17 @@
                 Итог со скидкой
             </dt>
             <dd class="bold">
-                @((Model.Total * (decimal)(1 - Model.Discount.Value / 100.0)).ToString("# ##0.00")) <i class="fa fa-rub"></i>
+                @((Model.Total * (decimal)(1 - Model.Discount / 100.0)).ToString("# ##0.00")) <i class="fa fa-rub"></i>
             </dd>
         }
     </dl>
 </div>
 
 <small class="hidden-print">Чтобы распечатать смету, нажмите Ctrl+P</small>
+
+@if (User.IsInRole(CRMRoles.Admin) || User.IsInRole(CRMRoles.Sales))
+{
+    <div>
+        <a class="btn btn-link" href="/Estimates/Edit/@Model.EstimateId"><i class="fa fa-pencil"></i>&nbsp;Редактировать</a>
+    </div>
+}

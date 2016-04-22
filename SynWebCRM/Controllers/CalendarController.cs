@@ -7,7 +7,7 @@ using SynWebCRM.Security;
 
 namespace SynWebCRM.Controllers
 {
-    [Authorize(Roles = Roles.Admin)]
+    [Authorize(Roles = CRMRoles.Admin)]
     public class CalendarController: Controller
     {
         Model db = new Model();

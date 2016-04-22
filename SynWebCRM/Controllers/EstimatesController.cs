@@ -9,7 +9,7 @@ using SynWebCRM.Security;
 
 namespace SynWebCRM.Controllers
 {
-    [Authorize(Roles = Roles.Admin + "," + Roles.Sales)]
+    [Authorize(Roles = CRMRoles.Admin + "," + CRMRoles.Sales)]
     public class EstimatesController:Controller
     {
         private readonly Model db = new Model();
@@ -36,23 +36,6 @@ namespace SynWebCRM.Controllers
             var deal = db.Deals.Find(model.DealId);
             ViewBag.Deal = deal;
             return View(model);
-        }
-
-        // POST: Deals/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "EstimateId,CreationDate,Guid,DealId,Creator,Discount,Total,HourlyRate")] Estimate estimate)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(estimate).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("View", new {id=estimate.Guid});
-            }
-
-            return View(estimate);
         }
 
         [AllowAnonymous]
