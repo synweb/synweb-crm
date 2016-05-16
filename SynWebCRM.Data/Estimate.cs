@@ -30,6 +30,9 @@ namespace SynWebCRM.Data
         [Display(Name = "»тог без скидки")]
         public decimal Total { get; set; }
 
+        [Display(Name = "»тог в мес€ц без скидки")]
+        public decimal MonthlyTotal { get; set; }
+
         [Display(Name = "„асова€ ставка")]
         public decimal HourlyRate { get; set; }
 
@@ -38,7 +41,9 @@ namespace SynWebCRM.Data
         public string Creator { get; set; }
 
         public string Title { get; set; }
+        public string Subtitle { get; set; }
         public string Text { get; set; }
+        public bool RequisitesVisible { get; set; }
 
         [Display(Name = "ѕункты")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

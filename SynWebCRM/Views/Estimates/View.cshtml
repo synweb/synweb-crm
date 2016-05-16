@@ -1,6 +1,5 @@
 ﻿@using SynWebCRM.Security
 @model SynWebCRM.Data.Estimate
-
 @{
     ViewBag.Title = "Смета на разработку";
     if (!User.Identity.IsAuthenticated)
@@ -12,8 +11,8 @@
 <link href='/Content/estimate.print.css' rel='stylesheet' media='print' />
 
 <style>
-    h1{
-        margin-top:0;
+    h1 {
+        margin-top: 0;
     }
 
     .estimate-logo {
@@ -21,9 +20,9 @@
         white-space: nowrap;
     }
 
-    .estimate-logo:hover{
-        text-decoration: none;
-    }
+        .estimate-logo:hover {
+            text-decoration: none;
+        }
 
         .estimate-logo span {
             margin-left: 10px;
@@ -47,10 +46,14 @@
 
 </div>
 
-<h1>@Model.Title</h1>
-<h2>Смета на разработку</h2>
-
-
+@if (!string.IsNullOrEmpty(Model.Title))
+{
+    <h1>@Model.Title</h1>
+}
+@if (!string.IsNullOrEmpty(Model.Subtitle))
+{
+    <h2>@Model.Subtitle</h2>
+}
 @if (Model.Items.Any())
 {
     <table class="table">
@@ -64,13 +67,76 @@
         {
             <tr>
                 <td>@item.Name</td>
-                <td class="text-center nowrap">@item.Price.ToString("# ##0.00")</td>
+                <td class="text-center nowrap">
+                    <span>@item.Price.ToString("# ##0.00")</span>
+                    @if (item.PerMonth)
+                    {
+                        <br/>
+                        <span>в мес.</span>
+                    }
+                </td>
                 <td class="text-center">@item.DevelopmentHours</td>
                 <td>@item.Description</td>
             </tr>
         }
     </table>
+    if (Model.Items.Where(x => x.DevelopmentHours.HasValue).Sum(x => x.DevelopmentHours.Value) > 0)
+     {
+         <div>
+             <dl class="dl-horizontal">
+                 <dt>Почасовая ставка</dt>
+                 <dd>1500 <i class="fa fa-rub"></i></dd>
+             </dl>
+         </div>
+     }
 }
+
+
+<div>
+    <dl class="dl-horizontal" style="font-size: 18px;">
+        @if (Model.Total != 0)
+        {
+            <dt>
+                Итог
+            </dt>
+            <dd>
+                <span @(Model.Discount != 0 ? "class=strikethrough" : "")>@Model.Total.ToString("# ##0.00") <i class="fa fa-rub"></i></span>
+                @if (Model.Discount != 0)
+                {
+                    <span class="bold">
+                        &nbsp;&nbsp;
+                        @((Model.Total * (decimal)(1 - Model.Discount / 100.0)).ToString("# ##0.00")) <i class="fa fa-rub"></i>
+                    </span>
+                }
+            </dd>
+        }
+        @if (Model.MonthlyTotal != 0)
+        {
+            <dt>
+                Ежемесячно
+            </dt>
+            <dd>
+                <span @(Model.Discount != 0 ? "class=strikethrough" : "")>@Model.MonthlyTotal.ToString("# ##0.00") <i class="fa fa-rub"></i></span>
+                @if (Model.Discount != 0)
+                {
+                    <span class="bold">
+                        &nbsp;&nbsp;
+                        @((Model.MonthlyTotal * (decimal)(1 - Model.Discount / 100.0)).ToString("# ##0.00")) <i class="fa fa-rub"></i>
+                    </span>
+                }
+            </dd>
+        }
+        @if (Model.Discount != 0)
+        {
+            <dt>
+                Скидка
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Discount)%
+            </dd>
+        }
+    </dl>
+</div>
 
 
 @if (!string.IsNullOrWhiteSpace(Model.Text))
@@ -82,39 +148,91 @@
 
 
 
+
 <div>
-
-    <dl class="dl-horizontal" style="font-size: 18px;">
-        <dt @(Model.Discount != 0 ? "class=bold" : "")>
-            Итог
+    <h2>Наши контакты</h2>
+    <dl class="dl-horizontal">
+        <dt>
+            Email
         </dt>
-        <dd @(Model.Discount != 0 ? "class=strikethrough" : "")>
-            @Model.Total.ToString("# ##0.00") <i class="fa fa-rub"></i>
+        <dd>
+            <a href="mailto:order@synweb.ru">order@synweb.ru</a>
         </dd>
-        @if (Model.Discount != 0)
-        {
-            <dt>
-                Скидка
-            </dt>
-            <dd>
-                @Html.DisplayFor(model => model.Discount)%
-            </dd>
+        <dt>
+            Телефон
+        </dt>
+        <dd>
+            <span>+7 919 997-15-17</span>
+        </dd>
+        <dt>
+            Адрес
+        </dt>
+        <dd>
+            <span>Москва, ул. Народная, дом 14, строение 3.</span>
+        </dd>
+        <dt>
 
-            <dt>
-                Итог со скидкой
-            </dt>
-            <dd class="bold">
-                @((Model.Total * (decimal)(1 - Model.Discount / 100.0)).ToString("# ##0.00")) <i class="fa fa-rub"></i>
-            </dd>
-        }
+        </dt>
+        <dd>
+            <a href="http://synweb.ru" target="_blank">http://synweb.ru</a>
+        </dd>
     </dl>
 </div>
+@if (Model.RequisitesVisible)
+{
+    <h2>Наши реквизиты</h2>
+    <dl class="dl-horizontal">
+        <dt>
 
-<small class="hidden-print">Чтобы распечатать смету, нажмите Ctrl+P</small>
+        </dt>
+        <dd><strong>ООО &laquo;Сидиум&raquo;</strong></dd>
+        <dt>
+            ОГРН
+        </dt>
+        <dd>
+            1167746193713
+        </dd>
+        <dt>
+            ИНН/КПП
+        </dt>
+        <dd>
+            7718299439/771801001
+        </dd>
+        <dt>
+            Юридический адрес
+        </dt>
+        <dd>
+            107076, г. Москва, Колодезный пер., д. 14, пом. XIII, комн. 41
+        </dd>
+        <dt>
+            Р/с
+        </dt>
+        <dd>
+            40702810500000017071 <em>в АО "РАЙФФАЙЗЕНБАНК" г. МОСКВА</em>
+        </dd>
+        <dt>
+            БИК
+        </dt>
+        <dd>
+            044525700
+        </dd>
+        <dt>
+            Корр/c
+        </dt>
+        <dd>
+            30101810200000000700
+        </dd>
+    </dl>
+}
+
+<blockquote>
+    <p>Содержимое данного документа является коммерческой тайной и не подлежит разглашению третьим лицам. Стороны несут ответственность за неразглашение информации, указанной в документе, в соответствии с законодательством РФ.</p>
+</blockquote>
+
+
+<p class="hidden-print"><small>Чтобы распечатать смету, нажмите Ctrl+P</small></p>
 
 @if (User.IsInRole(CRMRoles.Admin) || User.IsInRole(CRMRoles.Sales))
 {
-    <div>
-        <a class="btn btn-link" href="/Estimates/Edit/@Model.EstimateId"><i class="fa fa-pencil"></i>&nbsp;Редактировать</a>
-    </div>
+    <a class="btn btn-link hidden-print" href="/Estimates/Edit/@Model.EstimateId"><i class="fa fa-pencil"></i>&nbsp;Редактировать</a>
 }

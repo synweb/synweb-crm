@@ -25,6 +25,7 @@ namespace SynWebCRM.Data
         public decimal Price { get; set; }
 
         public double? DevelopmentHours { get; set; }
+        public bool PerMonth { get; set; }
 
         public bool IsOptional { get; set; }
 
