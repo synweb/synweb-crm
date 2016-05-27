@@ -33,6 +33,7 @@ namespace SynWebCRM.Controllers
         {
 
             var model = db.Estimates.Find(id);
+            model.Items = model.Items.OrderBy(x => x.SortOrder).ToList();
             var deal = db.Deals.Find(model.DealId);
             ViewBag.Deal = deal;
             return View(model);
@@ -41,7 +42,8 @@ namespace SynWebCRM.Controllers
         [AllowAnonymous]
         public ActionResult View(Guid id)
         {
-            var estimate = db.Estimates.SingleOrDefault(x => x.Guid == id);
+            var estimate = db.Estimates.Single(x => x.Guid == id);
+            estimate.Items = estimate.Items.OrderBy(x => x.SortOrder).ToList();
             return View(estimate);
         }
     }

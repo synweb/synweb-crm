@@ -21,6 +21,7 @@ namespace SynWebCRM.ApiControllers
             {
                 var rec = db.Estimates.Find(id);
                 var res = Mapper.Map<EstimateModel>(rec);
+                res.Items = res.Items.OrderBy(x => x.SortOrder).ToList();
                 return new ResultModel(true, res);
             }
             catch (Exception e)
