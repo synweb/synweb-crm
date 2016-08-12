@@ -23,8 +23,9 @@ namespace SynWebCRM.ApiControllers
         public ICollection<EventJsonItem> GetEvents([FromUri] GetEventsData data)
         {
             var hostings = GetHostingEvents(data.Start, data.End).Select(x => new EventJsonItem(x) {color = "#257e4a"});
+            var domains = GetDomainEvents(data.Start, data.End).Select(x => new EventJsonItem(x) {color = "#6546c5" });
             var dbEvents = GetDbEvents(data.Start, data.End).Select(x => new EventJsonItem(x) { color = "#9BB845" });
-            return hostings.Concat(dbEvents).ToList();
+            return hostings.Concat(dbEvents).Concat(domains).ToList();
         }
 
         [HttpPost]
@@ -55,8 +56,9 @@ namespace SynWebCRM.ApiControllers
             string eventTemplate =
                 File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Templates", "ics-event-template.txt"));
             var hostings = GetHostingEvents(start,end);
+            var domains = GetDomainEvents(start,end);
             var dbEvents = GetDbEvents(start, end);
-            var events = hostings.Concat(dbEvents);
+            var events = hostings.Concat(dbEvents).Concat(domains);
 
             var eventsStrings = events.Select(x => eventTemplate
                 .Replace("%summary%", x.Title)
@@ -91,6 +93,25 @@ namespace SynWebCRM.ApiControllers
             };
             result.Content.Headers.ContentType = new MediaTypeHeaderValue("text/calendar");
             return result;
+        }
+
+        private ICollection<EventItem> GetDomainEvents(DateTime start, DateTime end)
+        {
+            var url = "http://" + Request.RequestUri.Authority + "/";
+            var hostings = db.Websites.Where(x => x.IsActive
+                                                  && x.DomainEndingDate.HasValue
+                                                  && x.DomainEndingDate.Value >= start
+                                                  && x.DomainEndingDate.Value <= end)
+                .ToList().Select(x => new EventItem()
+                {
+                    Id = "Website" + x.WebsiteId,
+                    Title = "Домен " + x.Domain,
+                    Start = x.DomainEndingDate.Value.Date,
+                    Url = url + "Websites/Details/" + x.WebsiteId
+                }).ToList();
+
+
+            return hostings;
         }
 
         private ICollection<EventItem> GetHostingEvents(DateTime start, DateTime end)

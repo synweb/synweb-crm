@@ -1,14 +1,12 @@
 ﻿@model SynWebCRM.Data.Website
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Сайт/домен";
 }
 
-<h2>Details</h2>
+<h2>@ViewBag.Title</h2>
 
 <div>
-    <h4>Website</h4>
-    <hr />
     <dl class="dl-horizontal">
         <dt>
             @Html.DisplayNameFor(model => model.Customer.Name)
@@ -32,6 +30,14 @@
 
         <dd>
             @Html.DisplayFor(model => model.Domain)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DomainEndingDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DomainEndingDate)
         </dd>
 
         <dt>

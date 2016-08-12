@@ -27,7 +27,11 @@ namespace SynWebCRM.Data
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime? HostingEndingDate { get; set; }
 
-        [Display(Name = "Обслуживание (в месяц)")]
+        [Display(Name = "Окончание домена")]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        public DateTime? DomainEndingDate { get; set; }
+
+        [Display(Name = "Обслуживание")]
         public decimal? HostingPrice { get; set; }
 
         [Display(Name = "Клиент")]

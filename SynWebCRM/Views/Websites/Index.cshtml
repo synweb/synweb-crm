@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<SynWebCRM.Data.Website>
 
 @{
-    ViewBag.Title = "Сайты";
+    ViewBag.Title = "Сайты и домены";
 }
 
 <h2>@ViewBag.Title</h2>
@@ -21,6 +21,9 @@
             @Html.DisplayNameFor(model => model.IsActive)
         </th>
         <th>
+            @Html.DisplayNameFor(model => model.DomainEndingDate)
+        </th>
+        <th>
             @Html.DisplayNameFor(model => model.HostingEndingDate)
         </th>
         <th>
@@ -34,6 +37,9 @@
     bool hostingPayentComes = item.IsActive
                               && item.HostingEndingDate.HasValue
                               && item.HostingEndingDate.Value < DateTime.Now.AddDays(14);
+    bool domainPayentComes = item.DomainEndingDate.HasValue
+                             && item.DomainEndingDate > DateTime.Now
+                             && item.DomainEndingDate.Value < DateTime.Now.AddDays(14);
     <tr>
         <td @(hostingPayentComes?"class=bold":"")>
             @Html.DisplayFor(modelItem => item.Domain)
@@ -43,6 +49,9 @@
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.IsActive)
+        </td>
+        <td @(domainPayentComes ? "class=bold" : "")>
+            @Html.DisplayFor(modelItem => item.DomainEndingDate)
         </td>
         <td @(hostingPayentComes?"class=bold":"")>
             @Html.DisplayFor(modelItem => item.HostingEndingDate)

@@ -19,9 +19,19 @@ namespace SynWebCRM.Controllers
         // GET: Websites
         public ActionResult Index()
         {
-            var websites = db.Websites.Include(w => w.Customer).OrderByDescending(x => x.HostingEndingDate.HasValue)
-                .ThenBy(x => x.HostingEndingDate);
-            return View(websites.ToList());
+            var websites = db.Websites.Include(w => w.Customer).ToList()
+                .OrderByDescending(x => x.IsActive)
+                .ThenBy(x =>
+                {
+                    if (x.HostingEndingDate.HasValue)
+                    {
+                        return x.DomainEndingDate.HasValue
+                            ? new DateTime(Math.Min(x.HostingEndingDate.Value.Ticks, x.DomainEndingDate.Value.Ticks))
+                            : x.HostingEndingDate.Value;
+                    }
+                    return x.DomainEndingDate ?? new DateTime();
+                });
+            return View(websites);
         }
 
         // GET: Websites/Details/5
@@ -56,7 +66,7 @@ namespace SynWebCRM.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "WebsiteId,CreationDate,OwnerId,Domain,HostingEndingDate,HostingPrice,IsActive")] Website website)
+        public ActionResult Create([Bind(Include = "WebsiteId,CreationDate,OwnerId,Domain,DomainEndingDate,HostingEndingDate,HostingPrice,IsActive")] Website website)
         {
             if (ModelState.IsValid)
             {
@@ -91,7 +101,7 @@ namespace SynWebCRM.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "WebsiteId,CreationDate,OwnerId,Domain,HostingEndingDate,HostingPrice,IsActive")] Website website)
+        public ActionResult Edit([Bind(Include = "WebsiteId,CreationDate,OwnerId,Domain,DomainEndingDate,HostingEndingDate,HostingPrice,IsActive")] Website website)
         {
             if (ModelState.IsValid)
             {

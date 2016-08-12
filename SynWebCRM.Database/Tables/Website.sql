@@ -5,6 +5,7 @@
 	[OwnerId] INT NOT NULL,
 	[Domain] NVARCHAR(200) NOT NULL,
 	[HostingEndingDate] DATETIME NULL,
+	[DomainEndingDate] DATETIME NULL,
 	[HostingPrice] DECIMAL(18,2) NULL, 
 	[IsActive] BIT NOT NULL DEFAULT 1,
 	[Creator] NVARCHAR(256) NULL,
