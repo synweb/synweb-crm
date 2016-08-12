@@ -21,6 +21,7 @@ namespace SynWebCRM.Controllers
         {
             var websites = db.Websites.Include(w => w.Customer).ToList()
                 .OrderByDescending(x => x.IsActive)
+                .ThenByDescending(x => x.HostingEndingDate.HasValue || x.DomainEndingDate.HasValue)
                 .ThenBy(x =>
                 {
                     if (x.HostingEndingDate.HasValue)
