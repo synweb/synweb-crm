@@ -22,6 +22,9 @@ namespace SynWebCRM.Data
         [Display(Name="Сумма")]
         public decimal? Sum { get; set; }
 
+        [Display(Name = "Прибыль")]
+        public decimal? Profit { get; set; }
+
         [Display(Name="Клиент")]
         public int CustomerId { get; set; }
 
@@ -44,6 +47,10 @@ namespace SynWebCRM.Data
         [Display(Name = "Состояние")]
         public int DealStateId { get; set; }
 
+        [Required]
+        [Display(Name = "Услуга")]
+        public int? ServiceTypeId { get; set; }
+
         [ForeignKey("DealStateId")]
         [Display(Name = "Состояние")]
         public virtual DealState DealState { get; set; }
@@ -52,6 +59,9 @@ namespace SynWebCRM.Data
         public virtual Customer Customer { get; set; }
         [Display(Name = "Создатель")]
         public string Creator { get; set; }
+
+        [Display(Name = "Услуга")]
+        public ServiceType ServiceType { get; set; }
         public virtual ICollection<Note> Notes { get; set; }
 
         [Display(Name = "Сметы")]

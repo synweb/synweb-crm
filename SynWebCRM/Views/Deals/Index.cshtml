@@ -15,7 +15,6 @@
         <th data-bind="sort: { arr: deals, prop: 'customer.name' }">Клиент<span class="sort-icon"></span></th>
         <th data-bind="sort: { arr: deals, prop: 'sum' }">Сумма<span class="sort-icon"></span></th>
         <th data-bind="sort: { arr: deals, prop: 'name' }">Название<span class="sort-icon"></span></th>
-        <th data-bind="sort: { arr: deals, prop: 'type' }">Инициатива<span class="sort-icon"></span></th>
         <th data-bind="sort: { arr: deals, prop: 'dealState' }">Состояние<span class="sort-icon"></span></th>
         <th></th>
     </tr>
@@ -30,7 +29,6 @@
             <td><a data-bind="attr: {href: '/Customers/Details/'+customer.customerId}"><span data-bind="text: customer.name"></span></a></td>
             <td data-bind="text: sum"></td>
             <td><a data-bind="attr: {href: '/Deals/Details/'+dealId}"><span data-bind="text: name"></span></a></td>
-            <td data-bind="text: type"></td>
             <td data-bind="text: dealState"></td>
             <td>
                 <a title="Подробнее" data-bind="attr: {href: '/Deals/Details/'+dealId}"><i class="fa fa-eye"></i></a> |

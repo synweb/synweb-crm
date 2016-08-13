@@ -21,6 +21,7 @@ namespace SynWebCRM.Data
         public virtual DbSet<DealState> DealStates { get; set; }
         public virtual DbSet<Event> Events { get; set; }
         public virtual DbSet<Note> Notes { get; set; }
+        public virtual DbSet<ServiceType> ServiceTypes { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -65,6 +66,12 @@ namespace SynWebCRM.Data
             //    //.WillCascadeOnDelete(true);
             //    .HasForeignKey(x => x.EstimateId);
 
+
+            modelBuilder.Entity<ServiceType>()
+                .HasMany(e => e.Deals)
+                .WithRequired(e => e.ServiceType)
+                .HasForeignKey(e => e.ServiceTypeId)
+                .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<Customer>()
                         .HasMany<Note>(s => s.Notes)

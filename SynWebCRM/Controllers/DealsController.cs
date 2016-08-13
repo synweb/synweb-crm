@@ -17,16 +17,15 @@ namespace SynWebCRM.Controllers
         private Model db = new Model();
         private IEnumerable<Customer> Customers { get { return  db.Customers.OrderByDescending(x => x.CreationDate).ToList();} }
         
-        private SelectList CustomersSelectList
+        private SelectList GetCustomersSelectList(int? selectedId= null)
         {
-            get
-            {
-                return new SelectList(
-                    Customers.Select(x => new SelectListItem()
-                        {Text = $"{x.Name} ({x.CreationDate.ToString("dd.MM.yyyy")})", Value = x.CustomerId.ToString()}).OrderByDescending(x => x.Value),
-                "Value", "Text"
-                );
-            }
+            var res = new SelectList(
+                Customers.OrderByDescending(x => x.Deals.Count)
+                    .ThenBy(x => x.Name)
+                    .Select(x => new SelectListItem()
+                    {Text = $"{x.Name} ({x.CreationDate.ToString("dd.MM.yyyy")})", Value = x.CustomerId.ToString()}),
+                "Value", "Text", selectedId);
+            return res;
         }
 
         // GET: Deals
@@ -53,19 +52,16 @@ namespace SynWebCRM.Controllers
         // GET: Deals/Create
         public ActionResult Create(int? customerId)
         {
-            if (customerId.HasValue)
-            {
-                ViewBag.CustomerId = new SelectList(
-                    Customers.Select(x => new SelectListItem()
-                    { Text = $"{x.Name} ({x.CreationDate.ToString("dd.MM.yyyy")})", Value = x.CustomerId.ToString() }).OrderByDescending(x => x.Value),
-                "Value", "Text", customerId.Value);
-            }
-            else
-            {
-                ViewBag.CustomerId = CustomersSelectList;
-            }
+            ViewBag.CustomerId = GetCustomersSelectList(customerId);
             ViewBag.DealStateId = new SelectList(db.DealStates.OrderBy(x => x.Order), nameof(DealState.DealStateId), nameof(DealState.Name));
-            return View();
+            ViewBag.ServiceTypeId = new SelectList(db.ServiceTypes.OrderBy(x => x.ServiceTypeId), nameof(ServiceType.ServiceTypeId), nameof(ServiceType.Name));
+            var dealTypes = (from DealType i in Enum.GetValues(typeof(DealType))
+                             select new SelectListItem { Text = i.ToString(), Value = i.ToString() }).ToList();
+            ViewBag.DealType = dealTypes;
+
+            var model = new Deal();
+            model.CreationDate = DateTime.Now;
+            return View(model);
         }
 
         // POST: Deals/Create
@@ -73,19 +69,19 @@ namespace SynWebCRM.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "DealId,Sum,CustomerId,Name,Description,Type,DealStateId,NeedsAttention")] Deal deal)
+        public ActionResult Create([Bind(Include = "DealId,CreationDate,Sum,Profit,CustomerId,ServiceTypeId,Name,Description,Type,DealStateId,NeedsAttention")] Deal deal)
         {
             if (ModelState.IsValid)
             {
-                deal.CreationDate = DateTime.Now;
                 deal.Creator = User.Identity.Name;
                 db.Deals.Add(deal);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.CustomerId = CustomersSelectList;
+            ViewBag.CustomerId = GetCustomersSelectList();
             ViewBag.DealStateId = new SelectList(db.DealStates.OrderBy(x => x.Order), nameof(DealState.DealStateId), nameof(DealState.Name));
+            ViewBag.ServiceTypeId = new SelectList(db.ServiceTypes.OrderBy(x => x.ServiceTypeId), nameof(ServiceType.ServiceTypeId), nameof(ServiceType.Name));
             return View(deal);
         }
 
@@ -101,12 +97,9 @@ namespace SynWebCRM.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.CustomerId = new SelectList(
-                Customers.Select(x => new SelectListItem()
-                { Text = $"{x.Name} ({x.CreationDate.ToString("dd.MM.yyyy")})", Value = x.CustomerId.ToString() }).OrderByDescending(x => x.Value),
-            "Value", "Text", deal.CustomerId);
-
+            ViewBag.CustomerId = GetCustomersSelectList(deal.CustomerId);
             ViewBag.DealStateId = new SelectList(db.DealStates.OrderBy(x => x.Order), nameof(DealState.DealStateId), nameof(DealState.Name), deal.DealStateId);
+            ViewBag.ServiceTypeId = new SelectList(db.ServiceTypes.OrderBy(x => x.ServiceTypeId), nameof(ServiceType.ServiceTypeId), nameof(ServiceType.Name), deal.ServiceTypeId);
             return View(deal);
         }
 
@@ -115,7 +108,7 @@ namespace SynWebCRM.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "DealId,Creator,CreationDate,Sum,CustomerId,Name,Description,Type,DealStateId,NeedsAttention")] Deal deal)
+        public ActionResult Edit([Bind(Include = "DealId,Creator,CreationDate,ServiceTypeId,Sum,Profit,CustomerId,Name,Description,Type,DealStateId,NeedsAttention")] Deal deal)
         {
             if (ModelState.IsValid)
             {

@@ -71,5 +71,6 @@
     <Build Include="Tables\Note.sql" />
     <Build Include="Tables\Note_Customer.sql" />
     <Build Include="Tables\Note_Deal.sql" />
+    <Build Include="Tables\ServiceType.sql" />
   </ItemGroup>
 </Project>

@@ -9,6 +9,7 @@ using System.Web;
 using System.Web.Mvc;
 using SynWebCRM.Data;
 using SynWebCRM.Helpers;
+using SynWebCRM.Models;
 using SynWebCRM.Security;
 
 namespace SynWebCRM.Controllers
@@ -40,7 +41,7 @@ namespace SynWebCRM.Controllers
             {
                 return HttpNotFound();
             }
-            ICollection<Deal> deals = customer.Deals;//db.Deals.Where(x => x.CustomerId == id).ToList();
+            ICollection<Deal> deals = customer.Deals.OrderByDescending(x => x.CreationDate).ToList();//db.Deals.Where(x => x.CustomerId == id).ToList();
             ViewBag.Deals = deals;
             return View(customer);
         }
@@ -48,7 +49,9 @@ namespace SynWebCRM.Controllers
         // GET: Customers/Create
         public ActionResult Create()
         {
-            return View();
+            var model = new Customer();
+            model.CreationDate = DateTime.Now;
+            return View(model);
         }
 
         // POST: Customers/Create
@@ -56,7 +59,7 @@ namespace SynWebCRM.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "CustomerId,Name,Source,Description,Phone,Email,VkId,NeedsAttention")] Customer customer)
+        public ActionResult Create([Bind(Include = "CustomerId,CreationDate,Name,Source,Description,Phone,Email,VkId,NeedsAttention")] Customer customer)
         {
             if (!string.IsNullOrEmpty(customer.VkId))
             {
@@ -64,7 +67,6 @@ namespace SynWebCRM.Controllers
             }
             if (ModelState.IsValid)
             {
-                customer.CreationDate = DateTime.Now;
                 customer.Creator = User.Identity.Name;
                 db.Customers.Add(customer);
                 db.SaveChanges();
@@ -133,6 +135,90 @@ namespace SynWebCRM.Controllers
             db.Customers.Remove(customer);
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        public ActionResult Rating()
+        {
+            var customers = db.Customers.ToList();
+            List<CustomerChartElement> model = new List<CustomerChartElement>();
+            foreach (var customer in customers)
+            {
+                var deals = customer.Deals.Where(x => x.DealState.IsCompleted).OrderBy(x => x.CreationDate).ToList();
+                var orderCount = deals.Count();
+                double recency = 0;
+                double period = 0;
+                decimal summary = 0;
+                if (deals.Any())
+                {
+                    recency = (int) (DateTime.Now - deals.Last().CreationDate).TotalDays;
+                    summary = deals.Where(x => x.Profit.HasValue).Sum(x => x.Profit.Value);
+                    if(deals.Count > 1)
+                    {
+                        List<double> periods = new List<double>();
+                        for(int i = 1; i< deals.Count; i++)
+                        {
+                            periods.Add((deals[i].CreationDate - deals[i - 1].CreationDate).TotalDays);
+                        }
+                        period = periods.Average();
+                    }
+                    else
+                    {
+                        period = recency;
+                    }
+                }
+                if(summary == 0)
+                    continue;
+                if(recency > 365)
+                    continue;
+
+                
+
+                model.Add(new CustomerChartElement()
+                {
+                    Customer = customer,
+                    Recency = recency,
+                    OrderCount = orderCount,
+                    Period = period,
+                    Summary = summary,
+                    RatingValue = GetRatingValue(recency, period, summary)
+                });
+            }
+
+            double max = model.Max(x => x.RatingValue);
+            double avg = model.Average(x => x.RatingValue);
+            double low = avg/2;
+            double high = (max - avg)/2;
+            foreach (var customer in model.Where(x => x.RatingValue <= low))
+            {
+                customer.Rating = ClientRating.B;
+            }
+            foreach (var customer in model.Where(x => x.RatingValue > low && x.RatingValue <= avg))
+            {
+                customer.Rating = ClientRating.A;
+            }
+            foreach (var customer in model.Where(x => x.RatingValue > avg && x.RatingValue <= high))
+            {
+                customer.Rating = ClientRating.AA;
+            }
+            foreach (var customer in model.Where(x => x.RatingValue > high))
+            {
+                customer.Rating = ClientRating.AAA;
+            }
+
+            return View(model);
+        }
+
+        private double GetRatingValue(double recency, double period, decimal summary)
+        {
+            const double SUMMARY_WEIGHT = 1.0d;
+            const double RECENCY_WEIGHT = 0.2d;
+            const double PERIOD_WEIGHT = 0.5d;
+
+            double summaryPart = Math.Pow((double) summary, SUMMARY_WEIGHT);
+            double recencyPart = Math.Pow(1 / (1 + Math.Floor(recency / 30)), RECENCY_WEIGHT);
+            double periodPart = Math.Pow(1 / (1 + Math.Floor(period / 14)), PERIOD_WEIGHT);
+            var res = summaryPart * recencyPart * periodPart;
+            return res;
         }
 
         protected override void Dispose(bool disposing)
