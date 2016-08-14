@@ -12,6 +12,7 @@ namespace SynWebCRM.Data
         public Deal()
         {
             Notes = new HashSet<Note>();
+            Estimates = new HashSet<Estimate>();
         }
         public int DealId { get; set; }
 
@@ -60,8 +61,9 @@ namespace SynWebCRM.Data
         [Display(Name = "Создатель")]
         public string Creator { get; set; }
 
+        [ForeignKey("ServiceTypeId")]
         [Display(Name = "Услуга")]
-        public ServiceType ServiceType { get; set; }
+        public virtual ServiceType ServiceType { get; set; }
         public virtual ICollection<Note> Notes { get; set; }
 
         [Display(Name = "Сметы")]

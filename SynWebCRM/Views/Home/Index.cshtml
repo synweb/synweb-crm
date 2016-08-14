@@ -13,6 +13,8 @@
 
 @if (User.Identity.IsAuthenticated)
 {
+    <a href="/Customers/Rating">Рейтинг клиентов</a><br />
+    <a href="/Stats/Index">Статистика по доходам</a>
     <div class="row">
         <div class="col-md-12">
             <h2>Статистика за @DateTime.Now.Year год</h2>

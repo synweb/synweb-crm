@@ -218,6 +218,7 @@
     <Compile Include="Controllers\EstimatesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\StatsController.cs" />
     <Compile Include="Controllers\WebsitesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -225,9 +226,11 @@
     <Compile Include="Helpers\Formatters\JsonCamelCaseFormatter.cs" />
     <Compile Include="Helpers\Formatters\RuDateTimeConverter.cs" />
     <Compile Include="Helpers\ParseHelper.cs" />
+    <Compile Include="Helpers\RandomHelper.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ClientRating.cs" />
     <Compile Include="Models\CustomerChartElement.cs" />
+    <Compile Include="Models\IndexStatsModel.cs" />
     <Compile Include="Models\IndexVM.cs" />
     <Compile Include="Models\MonthlyFunnel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -362,6 +365,7 @@
     <Content Include="Scripts\tinymce\tinymce.ko.js" />
     <Content Include="Scripts\synwebcrm.wysiwyg.js" />
     <Content Include="Views\Customers\Rating.cshtml" />
+    <Content Include="Views\Stats\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

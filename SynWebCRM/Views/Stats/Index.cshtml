@@ -1,0 +1,69 @@
+﻿@using SynWebCRM.Helpers
+@model SynWebCRM.Models.IndexStatsModel
+@{
+    ViewBag.Title = "Статистика за квартал";
+}
+
+<link href='https://fonts.googleapis.com/css?family=Ubuntu&subset=cyrillic,latin' rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+<h1>@ViewBag.Title</h1>
+
+<script type="text/javascript">
+    google.charts.load("current", {packages:["corechart"]});
+    google.charts.setOnLoadCallback(drawChart);
+    function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Направление', 'Прибыль'],
+          @foreach(var rec in Model.RevenueByService)
+          {
+              <text>['@rec.Key.Name', @rec.Value],</text>
+          }
+        ]);
+
+        var options = {
+            title: 'Прибыль по направлениям',
+            pieHole: 0.4,
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('serviceRevenueChart'));
+        chart.draw(data, options);
+    }
+
+    google.charts.setOnLoadCallback(drawChart2);
+    function drawChart2() {
+        var data = google.visualization.arrayToDataTable([
+          ['Клиент', 'Прибыль'],
+          @foreach(var rec in Model.RevenueByCustomer.OrderBy(x => RandomHelper.GetRandom(int.MaxValue)))
+        {
+            <text>['@rec.Key.Name', @rec.Value],</text>
+        }
+        ]);
+        @{
+            var third = Enumerable.Range(0, Model.RevenueByCustomer.Count).Where(x => (x) % 3 == 0).ToArray();
+            var fourth = Enumerable.Range(0, Model.RevenueByCustomer.Count).Except(third).Where(x => (x+2) % 4 == 0).ToArray();
+        }
+        var options = {
+            title: 'Прибыль по клиентам',
+            pieSliceText: 'none',
+            slices: {
+                @foreach(var index in third)
+                {
+                    <text> @index: { offset: 0.1 }, </text>
+                }
+
+                @foreach(var index in fourth)
+                    {
+                        <text> @index: { offset: 0.2 }, </text>
+                    }
+            },
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('customerRevenueChart'));
+        chart.draw(data, options);
+    }
+</script>
+
+<div id="serviceRevenueChart" style="width: 1150px; height: 500px;"></div>
+<div id="customerRevenueChart" style="width: 1150px; height: 500px;"></div>
+
