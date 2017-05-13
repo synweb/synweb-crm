@@ -1,0 +1,70 @@
+﻿@using System.Globalization
+@using SynWebCRM.Web.Models
+@model List<CustomerChartElement>
+@{
+    ViewBag.Title = "Рейтинг клиентов";
+}
+
+<link href='https://fonts.googleapis.com/css?family=Ubuntu&subset=cyrillic,latin' rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+<script type="text/javascript">
+    google.charts.load("current", { packages: ["corechart"] });
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+            ['Оценка', 'Давность', 'Период', 'Клиент', 'Сумма'],
+            @foreach(var customer in Model)
+            {
+                <text>
+               ['@customer.Rating', @customer.Recency.ToString(CultureInfo.InvariantCulture), @customer.Period.ToString(CultureInfo.InvariantCulture), '@Html.Raw(customer.Customer.Name) [@customer.RatingValue.ToString("#.##")]',  @customer.Summary],
+              </text>
+          }
+        ]);
+
+        var options = {
+            hAxis: { title: 'Дней с последнего заказа' },
+            vAxis: { title: 'Дней между сделками' },
+            bubble: {
+                textStyle: {
+                    color: 'white',
+                    auraColor: 'black',
+                    fontSize: 11,
+                    fontName: 'Ubuntu',
+                }
+            },
+            
+        };
+
+        var chart = new google.visualization.BubbleChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+      }
+</script>
+
+<h1>@ViewBag.Title</h1>
+
+<div id="chart_div" style="width: 1150px; height: 550px;"></div>
+
+<table class="table text-center">
+    <thead>
+    <tr>
+        <th>Оценка</th>
+        <th>Рейтинг</th>
+        <th>Прибыль</th>
+        <th>Клиент</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var customer in Model.OrderByDescending(x => x.RatingValue))
+    {
+
+        <tr>
+            <th>@customer.Rating</th>
+            <td>@customer.RatingValue.ToString("#.##")</td>
+            <td>@customer.Summary</td>
+            <td><a href="/Customers/Details/@(customer.Customer.CustomerId)">@customer.Customer.Name</a></td>
+        </tr>
+    }
+    </tbody>
+</table>

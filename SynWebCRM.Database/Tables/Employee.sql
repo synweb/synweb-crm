@@ -1,7 +1,0 @@
-﻿CREATE TABLE [dbo].[Employee]
-(
-	[EmployeeId] INT NOT NULL PRIMARY KEY IDENTITY,
-	[Name] NVARCHAR(200) NOT NULL,
-	[Function] NVARCHAR(200) NOT NULL,
-	[Creator] NVARCHAR(256) NULL,
-)

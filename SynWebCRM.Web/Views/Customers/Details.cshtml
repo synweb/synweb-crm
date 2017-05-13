@@ -1,0 +1,147 @@
+﻿@using SynWebCRM.Web.Data
+@model SynWebCRM.Web.Data.Customer
+
+@{
+    ViewBag.Title = "Карточка клиента";
+    ICollection<Deal> deals = ViewBag.Deals;
+}
+
+<h2>@ViewBag.Title</h2>
+
+<div>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.CreationDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreationDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Creator)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Creator)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Source)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Source)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Phone)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Phone)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+        @if (!string.IsNullOrEmpty(Model.VkId))
+        {
+            <dt>
+                @Html.DisplayNameFor(model => model.VkId)
+            </dt>
+            <dd>
+                <a target="_blank" href="https://vk.com/@(Model.VkId)">@(Model.VkId) </a>
+            </dd>
+
+        }
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NeedsAttention)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.NeedsAttention)
+        </dd>
+
+    </dl>
+    <p>
+        @Html.ActionLink("Редактировать", "Edit", new { id = Model.CustomerId })
+    </p>
+    <div class="deals">
+        @{ var names = new Deal(); }
+        <h4>Сделки</h4>
+        <p>
+            <a href="/Deals/Create?CustomerId=@Model.CustomerId">Создать</a>
+        </p>
+        @if (Model.Deals.Any())
+        {
+            <table class="table">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => names.CreationDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => names.Customer.Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => names.Sum)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => names.Name)
+                    </th>
+                    <th></th>
+                </tr>
+
+                @foreach (var item in deals)
+                {
+                    <tr @( item.NeedsAttention ?"class=bold":"")>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CreationDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Customer.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Sum)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            <a title="Подробнее" href="/Deals/Details/@item.DealId"><i class="fa fa-eye"></i></a> |
+                            <a title="Редактировать" href="/Deals/Edit/@item.DealId"><i class="fa fa-pencil"></i></a> |
+                            <a title="Удалить" href="/Deals/Delete/@item.DealId"><i class="fa fa-trash-o"></i></a>
+                        </td>
+                    </tr>
+                }
+            </table>
+        }
+    </div>
+
+    @Html.Partial("_NoteList",Model.Notes)
+    @Html.Partial("_NewNote", new NewNoteModel("/api/customers/notes/add", Model.CustomerId))
+
+</div>
+<p>
+    @Html.ActionLink("Редактировать", "Edit", new { id = Model.CustomerId }) |
+    @Html.ActionLink("Назад к списку", "Index")
+</p>

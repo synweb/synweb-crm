@@ -1,5 +1,0 @@
-﻿CREATE TABLE [dbo].[ServiceType]
-(
-	[ServiceTypeId] INT NOT NULL PRIMARY KEY IDENTITY(1,1),
-	[Name] NVARCHAR(200) NOT NULL
-)

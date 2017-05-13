@@ -1,0 +1,52 @@
+﻿
+@{
+    ViewBag.Title = "Календарь";
+}
+
+<link href="~/css/fullcalendar.css" rel="stylesheet" />
+<link href="~/css/fullcalendar.print.css" rel="stylesheet" media="print" />
+<style>
+    
+    #calendar {
+        width: 100%;
+        margin: 0 auto;
+    }
+</style>
+<h2>&nbsp;</h2>
+<a href="/Calendar/CreateEvent">Новое событие</a>
+<div id='calendar'></div>
+
+@section Scripts{
+    <script>
+        jQuery = $;
+        $(document).ready(function() {
+            $('#calendar').fullCalendar({
+                selectable: true,
+                selectHelper: true,
+                select: function (start, end) {
+                    
+                    var title = prompt('Событие:');
+                    var eventData;
+                    if (title) {
+                        eventData = {
+                            name: title,
+                            startDate: start.format(),
+                            endDate: end.format()
+                        };
+                        $.post('/api/calendar/event/create', eventData, function (res) {
+                            $('#calendar').fullCalendar('renderEvent', res.data, false);
+                        });
+                    }
+                    $('#calendar').fullCalendar('unselect');
+                },
+                defaultDate: '@DateTime.Now.ToString("yyyy-MM-dd")',
+                editable: false,
+                eventLimit: true, // allow "more" link when too many events
+                //weekNumbers: true,
+                lang: 'ru',
+                timeFormat: ' ',
+                events: '/api/calendar/events/get'
+            });
+        });
+    </script>
+}

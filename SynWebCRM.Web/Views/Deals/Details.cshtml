@@ -1,0 +1,123 @@
+﻿@model SynWebCRM.Web.Data.Deal
+
+@{
+    ViewBag.Title = "Сделка";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<div>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Customer.Name)
+        </dt>
+
+        <dd>
+            <a href="/Customers/Details/@Model.CustomerId">@Model.Customer.Name</a>
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreationDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreationDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Creator)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Creator)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ServiceType)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ServiceType.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Sum)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Sum)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Profit)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Profit)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Type)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Type)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DealStateId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DealState.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NeedsAttention)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.NeedsAttention)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd>
+            @if (Model.Description != null)
+            {
+                @Html.Raw(Model.Description.Replace(Environment.NewLine, "<br />"))
+            }
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Estimates)
+        </dt>
+        <dd>
+            @if (Model.Estimates.Any())
+            {
+                foreach (var estimate in Model.Estimates)
+                {
+                    <div>
+                        <a href="/Estimates/Edit/@estimate.EstimateId">@estimate.Guid</a>
+                    </div>
+                }
+            }
+            <div><a href="/Estimates/Create/@Model.DealId">Создать</a></div>
+        </dd>
+    </dl>
+</div>
+
+
+@Html.Partial("_NoteList", Model.Notes)
+@Html.Partial("_NewNote", new NewNoteModel("/api/deals/notes/add", Model.DealId))
+
+<p>
+    @Html.ActionLink("Редактировать", "Edit", new { id = Model.DealId }) |
+    @Html.ActionLink("Назад к списку", "Index")
+</p>

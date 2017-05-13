@@ -1,0 +1,158 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp1.1</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageTargetFallback>$(PackageTargetFallback);portable-net45+win8+wp8+wpa81;</PackageTargetFallback>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <UserSecretsId>aspnet-SynWebCRM.Web-22b0d1de-3ec6-4232-a228-8174b5b27f69</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="Templates\ics-event-template.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\ics-template.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="wwwroot\css\bootstrap.min.css" />
+    <Content Include="wwwroot\css\estimate.print.css" />
+    <Content Include="wwwroot\css\fullcalendar.css" />
+    <Content Include="wwwroot\css\fullcalendar.print.css" />
+    <Content Include="wwwroot\js\fullcalendar\fullcalendar.js" />
+    <Content Include="wwwroot\js\fullcalendar\lang-all.js" />
+    <Content Include="wwwroot\js\knockout-3.4.0.js" />
+    <Content Include="wwwroot\js\moment.min.js" />
+    <Content Include="wwwroot\js\synwebcrm.estimates.js" />
+    <Content Include="wwwroot\js\synwebcrm.main.js" />
+    <Content Include="wwwroot\js\synwebcrm.note.js" />
+    <Content Include="wwwroot\js\synwebcrm.wysiwyg.js" />
+    <Content Include="wwwroot\js\tinymce\license.txt" />
+    <Content Include="wwwroot\js\tinymce\skins\lightgray\content.inline.min.css" />
+    <Content Include="wwwroot\js\tinymce\skins\lightgray\content.min.css" />
+    <Content Include="wwwroot\js\tinymce\skins\lightgray\fonts\tinymce-small.eot" />
+    <Content Include="wwwroot\js\tinymce\skins\lightgray\fonts\tinymce-small.json" />
+    <Content Include="wwwroot\js\tinymce\skins\lightgray\fonts\tinymce-small.svg" />
+    <Content Include="wwwroot\js\tinymce\skins\lightgray\fonts\tinymce-small.ttf" />
+    <Content Include="wwwroot\js\tinymce\skins\lightgray\fonts\tinymce-small.woff" />
+    <Content Include="wwwroot\js\tinymce\skins\lightgray\fonts\tinymce.eot" />
+    <Content Include="wwwroot\js\tinymce\skins\lightgray\fonts\tinymce.json" />
+    <Content Include="wwwroot\js\tinymce\skins\lightgray\fonts\tinymce.svg" />
+    <Content Include="wwwroot\js\tinymce\skins\lightgray\fonts\tinymce.ttf" />
+    <Content Include="wwwroot\js\tinymce\skins\lightgray\fonts\tinymce.woff" />
+    <Content Include="wwwroot\js\tinymce\skins\lightgray\img\anchor.gif" />
+    <Content Include="wwwroot\js\tinymce\skins\lightgray\img\loader.gif" />
+    <Content Include="wwwroot\js\tinymce\skins\lightgray\img\object.gif" />
+    <Content Include="wwwroot\js\tinymce\skins\lightgray\img\trans.gif" />
+    <Content Include="wwwroot\js\tinymce\skins\lightgray\skin.ie7.min.css" />
+    <Content Include="wwwroot\js\tinymce\skins\lightgray\skin.min.css" />
+    <Content Include="wwwroot\js\tinymce\tinymce.ko.js" />
+    <Content Include="wwwroot\js\tinymce\tinymce.min.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="6.0.2" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.1.0-beta2" />
+    <PackageReference Include="Microsoft.AspNetCore" Version="1.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="1.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="1.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="1.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="1.1.2" />
+    <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="1.1.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="1.1.1" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="1.1.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer.Design" Version="1.1.1" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="1.1.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="1.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="1.1.1" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="1.1.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" Version="1.1.0" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="1.1.0" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.Design" Version="1.1.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="1.0.0" />
+    <DotNetCliToolReference Include="Microsoft.Extensions.SecretManager.Tools" Version="1.0.0" />
+    <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="1.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Views\Websites\EditorTemplates\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web">
+      <HintPath>..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.1\System.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Update="Views\Account\AccessDenied.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Views\Account\ConfirmEmail.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Views\Account\ExternalLoginConfirmation.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Views\Account\ExternalLoginFailure.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Views\Account\ForgotPassword.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Views\Account\ForgotPasswordConfirmation.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Views\Account\Lockout.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Views\Account\Login.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Views\Account\Register.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Views\Account\ResetPassword.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Views\Account\ResetPasswordConfirmation.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Views\Account\SendCode.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Views\Account\VerifyCode.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Views\Manage\AddPhoneNumber.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Views\Manage\ChangePassword.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Views\Manage\Index.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Views\Manage\ManageLogins.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Views\Manage\SetPassword.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Views\Manage\VerifyPhoneNumber.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Views\Shared\Error.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+</Project>
