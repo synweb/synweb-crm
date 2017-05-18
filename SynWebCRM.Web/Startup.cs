@@ -17,6 +17,7 @@ using Microsoft.Extensions.Logging;
 using SynWebCRM.Web.ApiControllers.Models;
 using SynWebCRM.Web.Data;
 using SynWebCRM.Web.Models;
+using SynWebCRM.Web.Repository;
 using SynWebCRM.Web.Services;
 using ModelBindingContext = Microsoft.AspNetCore.Mvc.ModelBinding.ModelBindingContext;
 
@@ -57,6 +58,15 @@ namespace SynWebCRM.Web
                 .AddEntityFrameworkStores<Data.CRMModel>()
                 .AddDefaultTokenProviders();
 
+
+            // Uncomment to use mock storage
+            //services.AddScoped(typeof(IStorage), typeof(CRMModel));
+            // Uncomment to use SQLite storage
+            //services.AddScoped(typeof(IStorage), typeof(AspNetCoreStorage.Data.Sqlite.Storage));
+
+
+            //services.AddTransient<IEventRepository, EventRepository>();
+            services.AddTransient<IEventRepository, SynWebCRM.Web.Repository.Mock.EventRepository>();
             services.AddMvc();
 
             // Add application services.

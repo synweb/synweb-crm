@@ -1,16 +1,15 @@
 using Microsoft.EntityFrameworkCore.Metadata;
 using SynWebCRM.Web.Models;
+using SynWebCRM.Web.Repository;
 
 namespace SynWebCRM.Web.Data
 {
-    using System;
-    using System.ComponentModel.DataAnnotations.Schema;
-    using System.Linq;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
-    public partial class CRMModel : IdentityDbContext<ApplicationUser>
+    public partial class CRMModel : IdentityDbContext<ApplicationUser>, IStorageContext
     {
+        
         public CRMModel(DbContextOptions<CRMModel> options) : base(options)
         {
         }
@@ -25,8 +24,7 @@ namespace SynWebCRM.Web.Data
         public virtual DbSet<Event> Events { get; set; }
         public virtual DbSet<Note> Notes { get; set; }
         public virtual DbSet<ServiceType> ServiceTypes { get; set; }
-
-
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

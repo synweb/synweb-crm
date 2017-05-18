@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SynWebCRM.Web.Data;
+using SynWebCRM.Web.Repository;
 using SynWebCRM.Web.Security;
 
 namespace SynWebCRM.Web.Controllers
@@ -10,12 +11,13 @@ namespace SynWebCRM.Web.Controllers
     [Authorize(Roles = CRMRoles.Admin)]
     public class CalendarController: Controller
     {
-        public CalendarController(CRMModel crmModel)
+        public CalendarController(IEventRepository eventRepository)
         {
-            _crmModel = crmModel;
+            _eventRepository = eventRepository;
         }
 
-        private readonly CRMModel _crmModel;
+        //private readonly CRMModel _crmModel;
+        private IEventRepository _eventRepository;
 
         public ActionResult Index()
         {
@@ -36,7 +38,7 @@ namespace SynWebCRM.Web.Controllers
             {
                 return StatusCode(400);
             }
-            var ev = _crmModel.Events.Find(id);
+            var ev = _eventRepository.GetById(id.Value);
             if (ev == null)
             {
                 return StatusCode(404);
@@ -51,9 +53,7 @@ namespace SynWebCRM.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                ev.CreationDate = DateTime.Now;
-                _crmModel.Events.Add(ev);
-                _crmModel.SaveChanges();
+                _eventRepository.Add(ev);
                 return RedirectToAction("Index");
             }
             
@@ -66,7 +66,7 @@ namespace SynWebCRM.Web.Controllers
             {
                 return StatusCode(400);
             }
-            var ev = _crmModel.Events.Find(id);
+            var ev = _eventRepository.GetById(id.Value);
             if (ev == null)
             {
                 return StatusCode(404);
@@ -83,8 +83,7 @@ namespace SynWebCRM.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                _crmModel.Entry(ev).State = EntityState.Modified;
-                _crmModel.SaveChanges();
+                _eventRepository.Update(ev);
                 return RedirectToAction("Index");
             }
             return View(ev);
@@ -97,7 +96,7 @@ namespace SynWebCRM.Web.Controllers
             {
                 return StatusCode(400);
             }
-            var rec = _crmModel.Events.Find(id);
+            var rec = _eventRepository.GetById(id.Value);
             if (rec == null)
             {
                 return StatusCode(400);
@@ -110,9 +109,7 @@ namespace SynWebCRM.Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            var rec = _crmModel.Events.Find(id);
-            _crmModel.Events.Remove(rec);
-            _crmModel.SaveChanges();
+            _eventRepository.Delete(id);
             return RedirectToAction("Index");
         }
     }

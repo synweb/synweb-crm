@@ -1,0 +1,39 @@
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace SynWebCRM.Contract.Models
+{
+    [Table("Event")]
+    public partial class Event
+    {
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int EventId { get; set; }
+
+        [Display(Name = "Дата добавления")]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm}", ApplyFormatInEditMode = true)]
+        public DateTime CreationDate { get; set; }
+
+
+        [Display(Name = "Начало")]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm}", ApplyFormatInEditMode = true)]
+        public DateTime StartDate { get; set; }
+
+
+        [Display(Name = "Окончание")]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm}", ApplyFormatInEditMode = true)]
+        public DateTime? EndDate { get; set; }
+        
+        [Required]
+        [StringLength(200)]
+        [Display(Name = "Название")]
+        public string Name { get; set; }
+
+        [Display(Name = "Описание")]
+        public string Description { get; set; }
+
+        //[StringLength(500)]
+        //[Display(Name = "Url")]
+        //public string Url { get; set; }
+    }
+}
