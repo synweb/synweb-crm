@@ -53,3 +53,23 @@ tbody {
     .dl-horizontal dd:after {
         clear: both;
     }
+
+
+
+.estimate-logo {
+    margin: 20px;
+    white-space: nowrap;
+}
+
+    .estimate-logo:hover {
+        text-decoration: none;
+    }
+
+    .estimate-logo span {
+        margin-left: 10px;
+        color: #000;
+        font-size: 30px;
+        font-weight: 400;
+        vertical-align: middle;
+        letter-spacing: 1px;
+    }

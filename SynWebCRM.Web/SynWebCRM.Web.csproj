@@ -23,6 +23,8 @@
     <Content Include="wwwroot\css\estimate.print.css" />
     <Content Include="wwwroot\css\fullcalendar.css" />
     <Content Include="wwwroot\css\fullcalendar.print.css" />
+    <Content Include="wwwroot\images\est-logo.png" />
+    <Content Include="wwwroot\images\full-logo-hor-shadow-1500.png" />
     <Content Include="wwwroot\js\fullcalendar\fullcalendar.js" />
     <Content Include="wwwroot\js\fullcalendar\lang-all.js" />
     <Content Include="wwwroot\js\knockout-3.4.0.js" />
