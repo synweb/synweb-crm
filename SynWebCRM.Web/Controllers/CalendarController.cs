@@ -1,9 +1,8 @@
 ﻿using System;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using SynWebCRM.Web.Data;
-using SynWebCRM.Web.Repository;
+using SynWebCRM.Contract.Models;
+using SynWebCRM.Contract.Repositories;
 using SynWebCRM.Web.Security;
 
 namespace SynWebCRM.Web.Controllers

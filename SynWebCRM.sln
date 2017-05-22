@@ -13,6 +13,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SynWebCRM.Web.Tests", "SynW
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SynWebCRM.Contract", "SynWebCRM.Contract\SynWebCRM.Contract.csproj", "{B15E9CFB-E70F-41DD-89F6-5A800D1FEC82}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SynWebCRM.Data.Mock", "SynWebCRM.Data.Mock\SynWebCRM.Data.Mock.csproj", "{0DE19498-7761-40D8-8401-ADE36A679AD0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SynWebCRM.Data.EF", "SynWebCRM.Data.EF\SynWebCRM.Data.EF.csproj", "{3EF96D9A-7D4B-4E0F-9AD1-8781B04F9709}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +43,14 @@ Global
 		{B15E9CFB-E70F-41DD-89F6-5A800D1FEC82}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B15E9CFB-E70F-41DD-89F6-5A800D1FEC82}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B15E9CFB-E70F-41DD-89F6-5A800D1FEC82}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0DE19498-7761-40D8-8401-ADE36A679AD0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0DE19498-7761-40D8-8401-ADE36A679AD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0DE19498-7761-40D8-8401-ADE36A679AD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0DE19498-7761-40D8-8401-ADE36A679AD0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3EF96D9A-7D4B-4E0F-9AD1-8781B04F9709}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3EF96D9A-7D4B-4E0F-9AD1-8781B04F9709}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3EF96D9A-7D4B-4E0F-9AD1-8781B04F9709}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3EF96D9A-7D4B-4E0F-9AD1-8781B04F9709}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

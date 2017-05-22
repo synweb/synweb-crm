@@ -1,4 +1,4 @@
-﻿using SynWebCRM.Web.Data;
+﻿using SynWebCRM.Contract.Models;
 
 namespace SynWebCRM.Web.Models
 {
@@ -20,7 +20,7 @@ namespace SynWebCRM.Web.Models
         /// Days after last order
         /// </summary>
         public double Recency { get; set; }
-        
+
         /// <summary>
         /// Completed order count
         /// </summary>

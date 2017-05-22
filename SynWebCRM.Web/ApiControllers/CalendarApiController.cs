@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Text;
 using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using SynWebCRM.Web.Data;
 using SynWebCRM.Web.Models;
+using SynWebCRM.Data.EF;
+using SynWebCRM.Contract.Models;
+using Microsoft.AspNetCore.Http.Extensions; 
 
 namespace SynWebCRM.Web.ApiControllers
 {

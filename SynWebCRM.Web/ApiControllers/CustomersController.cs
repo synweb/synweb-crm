@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using SynWebCRM.Web.ApiControllers.Models;
-using SynWebCRM.Web.Data;
 using SynWebCRM.Web.Models;
+using SynWebCRM.Data.EF;
+using SynWebCRM.Contract.Models;
 
 namespace SynWebCRM.Web.ApiControllers
 {

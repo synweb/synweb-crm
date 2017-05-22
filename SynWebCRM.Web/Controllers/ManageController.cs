@@ -5,9 +5,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using SynWebCRM.Web.Models;
 using SynWebCRM.Web.Models.ManageViewModels;
 using SynWebCRM.Web.Services;
+using SynWebCRM.Data.EF.Models;
 
 namespace SynWebCRM.Web.Controllers
 {

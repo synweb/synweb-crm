@@ -4,8 +4,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using SynWebCRM.Web.Data;
 using SynWebCRM.Web.Security;
+using SynWebCRM.Data.EF;
+using SynWebCRM.Contract.Models;
 
 namespace SynWebCRM.Web.Controllers
 {

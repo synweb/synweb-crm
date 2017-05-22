@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using SynWebCRM.Web.Data;
+using SynWebCRM.Contract.Models;
 
 namespace SynWebCRM.Web.Models
 {

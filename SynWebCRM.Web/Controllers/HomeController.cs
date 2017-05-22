@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using SynWebCRM.Web.Data;
 using SynWebCRM.Web.Models;
+using SynWebCRM.Data.EF;
+using SynWebCRM.Contract.Models;
 
 namespace SynWebCRM.Web.Controllers
 {
@@ -41,10 +42,10 @@ namespace SynWebCRM.Web.Controllers
                 month.NewCustomers = _crmModel.Customers.Count(x => x.CreationDate.Year == now.Year
                     && x.CreationDate.Month == month.MonthOrder);
                 month.NewIncomingRequests = _crmModel.Deals.Count(x => x.CreationDate.Year == now.Year
-                    && x.Type == Web.Data.DealType.Incoming
+                    && x.Type == DealType.Incoming
                     && x.CreationDate.Month == month.MonthOrder);
                 month.NewOutcomingRequests = _crmModel.Deals.Count(x => x.CreationDate.Year == now.Year
-                    && x.Type == Web.Data.DealType.Outcoming
+                    && x.Type == DealType.Outcoming
                     && x.CreationDate.Month == month.MonthOrder);
                 month.CompletedDeals = _crmModel.Deals.Count(x => x.CreationDate.Year == now.Year
                     && x.CreationDate.Month == month.MonthOrder

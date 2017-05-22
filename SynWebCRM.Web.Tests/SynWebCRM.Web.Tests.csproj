@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SynWebCRM.Data.Mock\SynWebCRM.Data.Mock.csproj" />
     <ProjectReference Include="..\SynWebCRM.Web\SynWebCRM.Web.csproj" />
   </ItemGroup>
 

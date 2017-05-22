@@ -4,7 +4,9 @@ using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using SynWebCRM.Web.Data;
+using SynWebCRM.Contract.Models;
+using SynWebCRM.Contract.Repositories;
+using SynWebCRM.Data.EF;
 using SynWebCRM.Web.Helpers;
 using SynWebCRM.Web.Models;
 using SynWebCRM.Web.Security;
@@ -14,21 +16,20 @@ namespace SynWebCRM.Web.Controllers
     [Authorize(Roles = CRMRoles.Admin + "," + CRMRoles.Sales)]
     public class CustomersController : Controller
     {
-        public CustomersController(CRMModel crmModel)
+        public CustomersController(ICustomerRepository customerRepository)
         {
-            _crmModel = crmModel;
+            _customerRepository = customerRepository;
         }
-
-        private readonly CRMModel _crmModel;
-
-        private IQueryable<Customer> Customers => _crmModel.Customers.Include(x => x.Deals)
-            .OrderByDescending(x => x.NeedsAttention)
-            .ThenByDescending(x => x.CreationDate);
+        
+        private readonly ICustomerRepository _customerRepository;
+       
 
         // GET: Customers
         public ActionResult Index()
         {
-            return View(Customers);
+            var customers = _customerRepository.AllIncluding(x => x.Deals).OrderByDescending(x => x.NeedsAttention)
+                .ThenByDescending(x => x.CreationDate);
+            return View(customers);
         }
 
         // GET: Customers/Details/5
@@ -38,11 +39,7 @@ namespace SynWebCRM.Web.Controllers
             {
                 return StatusCode(400);  
             }
-            Customer customer = _crmModel.Customers
-                .Include(x => x.Deals)
-                .Include(x => x.Notes)
-                .Include(x => x.Websites)
-                .SingleOrDefault(x => x.CustomerId == id.Value);
+            Customer customer = _customerRepository.GetById(id.Value);
             if (customer == null)
             {
                 return StatusCode(404);
@@ -74,8 +71,7 @@ namespace SynWebCRM.Web.Controllers
             if (ModelState.IsValid)
             {
                 customer.Creator = User.Identity.Name;
-                _crmModel.Customers.Add(customer);
-                _crmModel.SaveChanges();
+                _customerRepository.Add(customer);
                 return RedirectToAction("Details", new {id = customer.CustomerId});
             }
 
@@ -87,9 +83,9 @@ namespace SynWebCRM.Web.Controllers
         {
             if (id == null)
             {
-                return StatusCode(400);
+                return StatusCode(404);
             }
-            Customer customer = _crmModel.Customers.Find(id);
+            Customer customer = _customerRepository.GetById(id.Value);
             if (customer == null)
             {
                 return StatusCode(400);
@@ -110,8 +106,7 @@ namespace SynWebCRM.Web.Controllers
             }
             if (ModelState.IsValid)
             {
-                _crmModel.Entry(customer).State = EntityState.Modified;
-                _crmModel.SaveChanges();
+                _customerRepository.Update(customer);
                 return RedirectToAction("Index");
             }
             return View(customer);
@@ -124,7 +119,7 @@ namespace SynWebCRM.Web.Controllers
             {
                 return StatusCode(400);
             }
-            Customer customer = _crmModel.Customers.Find(id);
+            Customer customer = _customerRepository.GetById(id.Value);
             if (customer == null)
             {
                 return StatusCode(404);
@@ -137,15 +132,14 @@ namespace SynWebCRM.Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Customer customer = _crmModel.Customers.Find(id);
-            _crmModel.Customers.Remove(customer);
-            _crmModel.SaveChanges();
+            Customer customer = _customerRepository.GetById(id);
+            _customerRepository.Delete(id);
             return RedirectToAction("Index");
         }
 
         public ActionResult Rating()
         {
-            var customers = _crmModel.Customers.Include(x => x.Deals).ThenInclude(x => x.DealState).ToList();
+            var customers = _customerRepository.AllWithDeals();
             List<CustomerChartElement> model = new List<CustomerChartElement>();
             foreach (var customer in customers)
             {
@@ -229,10 +223,6 @@ namespace SynWebCRM.Web.Controllers
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
-                _crmModel.Dispose();
-            }
             base.Dispose(disposing);
         }
     }

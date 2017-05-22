@@ -1,4 +1,4 @@
-﻿@model SynWebCRM.Web.Data.Customer
+﻿@model SynWebCRM.Contract.Models.Customer
 
 @{
     ViewBag.Title = "Создание клиента";
@@ -34,7 +34,7 @@
             <div class="col-md-10">
                 @*@Html.DropDownListFor(model => model.Source, Html.GetEnumSelectList<SynWebCRM.Data.CustomerSource>(), htmlAttributes: new { @class = "form-control" })*@
                 
-                <select asp-for="Source" class="form-control" asp-items="@(Html.GetEnumSelectList<SynWebCRM.Web.Data.CustomerSource>())"></select>
+                <select asp-for="Source" class="form-control" asp-items="@(Html.GetEnumSelectList<SynWebCRM.Contract.Models.CustomerSource>())"></select>
 
                 @Html.ValidationMessageFor(model => model.Source, "", new { @class = "text-danger" })
             </div>

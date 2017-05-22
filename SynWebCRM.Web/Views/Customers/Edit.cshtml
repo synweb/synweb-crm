@@ -1,4 +1,4 @@
-﻿@model SynWebCRM.Web.Data.Customer
+﻿@model SynWebCRM.Contract.Models.Customer
 
 @{
     ViewBag.Title = "Редактирование клиента";
@@ -37,7 +37,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Source, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                <select asp-for="Source" class="form-control" asp-items="@(Html.GetEnumSelectList<SynWebCRM.Web.Data.CustomerSource>())"></select>
+                <select asp-for="Source" class="form-control" asp-items="@(Html.GetEnumSelectList<SynWebCRM.Contract.Models.CustomerSource>())"></select>
                 @Html.ValidationMessageFor(model => model.Source, "", new { @class = "text-danger" })
             </div>
         </div>

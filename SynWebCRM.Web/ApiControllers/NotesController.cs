@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using SynWebCRM.Web.Data;
+using SynWebCRM.Data.EF;
 using SynWebCRM.Web.Models;
 using SynWebCRM.Web.Security;
 

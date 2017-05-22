@@ -1,25 +1,20 @@
-﻿using System;
-using System.Globalization;
-using System.Threading.Tasks;
-using System.Web.ModelBinding;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Internal;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using SynWebCRM.Web.ApiControllers.Models;
-using SynWebCRM.Web.Data;
-using SynWebCRM.Web.Models;
-using SynWebCRM.Web.Repository;
+using SynWebCRM.Contract.Repositories;
+using SynWebCRM.Data.EF;
+using SynWebCRM.Data.EF.Models;
+//using SynWebCRM.Contract.Models;
+//using SynWebCRM.Contract.Repositories;
+//using SynWebCRM.Data.EF;
+//using SynWebCRM.Data.EF.Models;
+//using SynWebCRM.Web.ApiControllers.Models;
 using SynWebCRM.Web.Services;
-using ModelBindingContext = Microsoft.AspNetCore.Mvc.ModelBinding.ModelBindingContext;
 
 namespace SynWebCRM.Web
 {
@@ -49,24 +44,25 @@ namespace SynWebCRM.Web
         {
             var sqlConnectionString = Configuration.GetConnectionString("DefaultConnection");
             // Add framework services.
-            services.AddDbContext<Data.CRMModel>(options =>
+            services.AddDbContext<CRMModel>(options =>
                 options.UseNpgsql(
                 sqlConnectionString,
-                b => b.MigrationsAssembly("SynWebCRM.Web")));
+                b => b.MigrationsAssembly("SynWebCRM.Data.EF")));
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<Data.CRMModel>()
+                .AddEntityFrameworkStores<CRMModel>()
                 .AddDefaultTokenProviders();
 
 
             // Uncomment to use mock storage
-            //services.AddScoped(typeof(IStorage), typeof(CRMModel));
+            services.AddScoped(typeof(IStorage), typeof(CRMModel));
             // Uncomment to use SQLite storage
             //services.AddScoped(typeof(IStorage), typeof(AspNetCoreStorage.Data.Sqlite.Storage));
 
 
+            services.AddTransient<IEventRepository, EventRepository>();
+            services.AddTransient<ICustomerRepository, CustomerRepository>();
             //services.AddTransient<IEventRepository, EventRepository>();
-            services.AddTransient<IEventRepository, SynWebCRM.Web.Repository.Mock.EventRepository>();
             services.AddMvc();
 
             // Add application services.
@@ -109,18 +105,18 @@ namespace SynWebCRM.Web
 
         public static void ConfigureMapper()
         {
-            Mapper.Initialize(cfg =>
-            {
-                //cfg.CreateMap<Customer, DealsApiController.CustomerModel>();
+            //Mapper.Initialize(cfg =>
+            //{
+            //    //cfg.CreateMap<Customer, DealsApiController.CustomerModel>();
 
-                cfg.CreateMap<Deal, DealModel>()
-                    .ForMember(x => x.CreationDate, x => x.MapFrom(y => y.CreationDate.ToString("yyyy-MM-dd HH:mm")))
-                    .ForMember(x => x.Customer, x => x.MapFrom(y => y.Customer.Name))
-                    .ForMember(x => x.DealState, x => x.MapFrom(y => y.DealState.Name))
-                    .ForMember(x => x.Type, x => x.MapFrom(y => y.Type == DealType.Incoming ? "Входящая" : "Исходящая"))
-                    .ForMember(x => x.Customer, x => x.MapFrom(y => new CustomerModel { CustomerId = y.Customer.CustomerId, Name = y.Customer.Name }));
-            });
-            Mapper.AssertConfigurationIsValid();
+            //    cfg.CreateMap<Deal, DealModel>()
+            //        .ForMember(x => x.CreationDate, x => x.MapFrom(y => y.CreationDate.ToString("yyyy-MM-dd HH:mm")))
+            //        .ForMember(x => x.Customer, x => x.MapFrom(y => y.Customer.Name))
+            //        .ForMember(x => x.DealState, x => x.MapFrom(y => y.DealState.Name))
+            //        .ForMember(x => x.Type, x => x.MapFrom(y => y.Type == DealType.Incoming ? "Входящая" : "Исходящая"))
+            //        .ForMember(x => x.Customer, x => x.MapFrom(y => new CustomerModel { CustomerId = y.Customer.CustomerId, Name = y.Customer.Name }));
+            //});
+            //Mapper.AssertConfigurationIsValid();
         }
 
         //public class DecimalModelBinder : Microsoft.AspNetCore.Mvc.ModelBinding.IModelBinder

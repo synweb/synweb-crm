@@ -7,9 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using SynWebCRM.Web.Models;
 using SynWebCRM.Web.Models.AccountViewModels;
 using SynWebCRM.Web.Services;
+using SynWebCRM.Data.EF.Models;
 
 namespace SynWebCRM.Web.Controllers
 {

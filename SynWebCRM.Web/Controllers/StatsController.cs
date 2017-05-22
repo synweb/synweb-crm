@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using SynWebCRM.Web.Data;
 using SynWebCRM.Web.Models;
+using SynWebCRM.Data.EF;
+using SynWebCRM.Contract.Models;
 
 namespace SynWebCRM.Web.Controllers
 {
