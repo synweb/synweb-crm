@@ -5,17 +5,19 @@ using Microsoft.AspNetCore.Mvc;
 using SynWebCRM.Web.Models;
 using SynWebCRM.Data.EF;
 using SynWebCRM.Contract.Models;
+using SynWebCRM.Contract.Repositories;
 
 namespace SynWebCRM.Web.Controllers
 {
     public class StatsController: Controller
     {
-        public StatsController(CRMModel crmModel)
+        public StatsController(IDealRepository dealRepository)
         {
-            _crmModel = crmModel;
+            _dealRepository = dealRepository;
         }
 
-        private readonly CRMModel _crmModel;
+
+        private readonly IDealRepository _dealRepository;
         private readonly DateTime _startDate = DateTime.Now.AddMonths(-3);
 
         public ActionResult Index()
@@ -38,6 +40,6 @@ namespace SynWebCRM.Web.Controllers
             return groups.ToDictionary(g => g.Key, g => g.Sum(x => x.Profit.Value));
         }
 
-        private ICollection<Deal> LatestCompletedDeals => _crmModel.Deals.Where(x => x.DealState.IsCompleted && x.Profit.HasValue && x.CreationDate > _startDate).ToList();
+        private IEnumerable<Deal> LatestCompletedDeals => _dealRepository.GetLatestCompletedDeals(_startDate); 
     }
 }

@@ -7,23 +7,26 @@ using Microsoft.EntityFrameworkCore;
 using SynWebCRM.Web.Security;
 using SynWebCRM.Data.EF;
 using SynWebCRM.Contract.Models;
+using SynWebCRM.Contract.Repositories;
 
 namespace SynWebCRM.Web.Controllers
 {
     [Authorize(Roles = CRMRoles.Admin)]
     public class WebsitesController : Controller
     {
-        private CRMModel _crmModel;
-
-        public WebsitesController(CRMModel crmModel)
+        public WebsitesController(IWebsiteRepository websiteRepository, ICustomerRepository customerRepository)
         {
-            _crmModel = crmModel;
+            _websiteRepository = websiteRepository;
+            _customerRepository = customerRepository;
         }
+
+        private readonly IWebsiteRepository _websiteRepository;
+        private readonly ICustomerRepository _customerRepository;
 
         // GET: Websites
         public ActionResult Index()
         {
-            var websites = _crmModel.Websites.Include(w => w.Customer).ToList()
+            var websites = _websiteRepository.All()
                 .OrderByDescending(x => x.IsActive)
                 .ThenByDescending(x => x.HostingEndingDate.HasValue || x.DomainEndingDate.HasValue)
                 .ThenBy(x =>
@@ -36,6 +39,7 @@ namespace SynWebCRM.Web.Controllers
                     }
                     return x.DomainEndingDate ?? new DateTime();
                 });
+                
             return View(websites);
         }
 
@@ -46,7 +50,7 @@ namespace SynWebCRM.Web.Controllers
             {
                 return StatusCode(400);
             }
-            Website website = _crmModel.Websites.Include(x => x.Customer).SingleOrDefault(x => x.WebsiteId == id);
+            Website website = _websiteRepository.GetById(id.Value);
             if (website == null)
             {
                 return StatusCode(400);
@@ -57,7 +61,7 @@ namespace SynWebCRM.Web.Controllers
         // GET: Websites/Create
         public ActionResult Create()
         {
-            ViewBag.OwnerId = new SelectList(_crmModel.Customers, "CustomerId", "Name");
+            ViewBag.OwnerId = new SelectList(_customerRepository.All(), "CustomerId", "Name");
             var model = new Website
             {
                 HostingEndingDate = DateTime.Now.AddYears(1),
@@ -75,13 +79,11 @@ namespace SynWebCRM.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                website.CreationDate = DateTime.Now;
-                _crmModel.Websites.Add(website);
-                _crmModel.SaveChanges();
+                _websiteRepository.Add(website);
                 return RedirectToAction("Index");
             }
 
-            ViewBag.OwnerId = new SelectList(_crmModel.Customers, "CustomerId", "Name", website.OwnerId);
+            ViewBag.OwnerId = new SelectList(_customerRepository.All(), "CustomerId", "Name");
             return View(website);
         }
 
@@ -92,12 +94,12 @@ namespace SynWebCRM.Web.Controllers
             {
                 return StatusCode(400);
             }
-            Website website = _crmModel.Websites.Find(id);
+            Website website = _websiteRepository.GetById(id.Value);
             if (website == null)
             {
                 return StatusCode(400);
             }
-            ViewBag.OwnerId = new SelectList(_crmModel.Customers, "CustomerId", "Name", website.OwnerId);
+            ViewBag.OwnerId = new SelectList(_customerRepository.All(), "CustomerId", "Name");
             return View(website);
         }
 
@@ -110,11 +112,10 @@ namespace SynWebCRM.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                _crmModel.Entry(website).State = EntityState.Modified;
-                _crmModel.SaveChanges();
+                _websiteRepository.Update(website);
                 return RedirectToAction("Index");
             }
-            ViewBag.OwnerId = new SelectList(_crmModel.Customers, "CustomerId", "Name", website.OwnerId);
+            ViewBag.OwnerId = new SelectList(_customerRepository.All(), "CustomerId", "Name");
             return View(website);
         }
 
@@ -125,7 +126,7 @@ namespace SynWebCRM.Web.Controllers
             {
                 return StatusCode(400);
             }
-            Website website = _crmModel.Websites.Find(id);
+            Website website = _websiteRepository.GetById(id.Value);
             if (website == null)
             {
                 return StatusCode(400);
@@ -138,18 +139,12 @@ namespace SynWebCRM.Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Website website = _crmModel.Websites.Find(id);
-            _crmModel.Websites.Remove(website);
-            _crmModel.SaveChanges();
+            _websiteRepository.Delete(id);
             return RedirectToAction("Index");
         }
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
-                _crmModel.Dispose();
-            }
             base.Dispose(disposing);
         }
     }

@@ -10,62 +10,59 @@ using SynWebCRM.Contract.Repositories;
 
 namespace SynWebCRM.Data.EF
 {
-    public class CustomerRepository: ICustomerRepository
+    public class DealStateRepository: IDealStateRepository
     {
-        private CRMModel _db;
-
-        public CustomerRepository(CRMModel db)
+        public DealStateRepository(CRMModel db)
         {
             _db = db;
         }
+
+        private readonly CRMModel _db;
 
         public void SetStorageContext(IStorageContext storageContext)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Customer> All()
+        public IEnumerable<DealState> All()
         {
-            return _db.Customers.ToList();
+            return _db.DealStates.OrderBy(x => x.Order).ToList();
         }
 
-        public IEnumerable<Customer> AllIncluding<TProp>(params Expression<Func<Customer, TProp>>[] includeProperties)
+        public IEnumerable<DealState> AllIncluding<TProp>(params Expression<Func<DealState, TProp>>[] includeProperties)
         {
-            IIncludableQueryable<Customer, TProp> query = null;
+            IIncludableQueryable<DealState, TProp> query = null;
             if (includeProperties.Length > 0)
             {
-                query = _db.Customers.Include(includeProperties[0]);
+                query = _db.DealStates.Include(includeProperties[0]);
             }
             for (int queryIndex = 1; queryIndex < includeProperties.Length; ++queryIndex)
             {
                 query = query.Include(includeProperties[queryIndex]);
             }
-            return query == null ? All() : (IQueryable<Customer>)query;
+            return query == null ? All() : (IQueryable<DealState>)query;
         }
 
-        public Customer GetById(int id)
+        public DealState GetById(int id)
         {
-            return _db.Customers
-                .Include(x => x.Deals)
-                .Include(x => x.Notes)
-                .Include(x => x.Websites)
-                .SingleOrDefault(x => x.CustomerId == id);
+            return _db.DealStates.SingleOrDefault(x => x.DealStateId == id);
         }
 
-        public int Add(Customer entity)
+        public int Add(DealState entity)
         {
             var rec = _db.Add(entity);
             _db.SaveChanges();
-            return rec.Entity.CustomerId;
+            return rec.Entity.DealStateId;
         }
 
-        public void Update(Customer entity)
+
+        public void Update(DealState entity)
         {
             _db.Entry(entity).State = EntityState.Modified;
             _db.SaveChanges();
         }
 
-        public void Delete(Customer entity)
+        public void Delete(DealState entity)
         {
             _db.Remove(entity);
             _db.SaveChanges();
@@ -73,13 +70,8 @@ namespace SynWebCRM.Data.EF
 
         public void Delete(int id)
         {
-            var rec = _db.Customers.Find(id);
+            var rec = _db.DealStates.Find(id);
             Delete(rec);
-        }
-
-        public IEnumerable<Customer> AllWithDeals()
-        {
-            return _db.Customers.Include(x => x.Deals).ThenInclude(x => x.DealState).ToList();
         }
     }
 }

@@ -62,7 +62,10 @@ namespace SynWebCRM.Web
 
             services.AddTransient<IEventRepository, EventRepository>();
             services.AddTransient<ICustomerRepository, CustomerRepository>();
-            //services.AddTransient<IEventRepository, EventRepository>();
+            services.AddTransient<IDealRepository, DealRepository>();
+            services.AddTransient<IDealStateRepository, DealStateRepository>();
+            services.AddTransient<IServiceTypeRepository, ServiceTypeRepository>();
+            services.AddTransient<IWebsiteRepository, WebsiteRepository>();
             services.AddMvc();
 
             // Add application services.

@@ -10,11 +10,11 @@ using SynWebCRM.Contract.Repositories;
 
 namespace SynWebCRM.Data.EF
 {
-    public class CustomerRepository: ICustomerRepository
+    public class ServiceTypeRepository: IServiceTypeRepository
     {
-        private CRMModel _db;
+        private readonly CRMModel _db;
 
-        public CustomerRepository(CRMModel db)
+        public ServiceTypeRepository(CRMModel db)
         {
             _db = db;
         }
@@ -24,48 +24,44 @@ namespace SynWebCRM.Data.EF
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Customer> All()
+        public IEnumerable<ServiceType> All()
         {
-            return _db.Customers.ToList();
+            return _db.ServiceTypes.ToList();
         }
 
-        public IEnumerable<Customer> AllIncluding<TProp>(params Expression<Func<Customer, TProp>>[] includeProperties)
+        public IEnumerable<ServiceType> AllIncluding<TProp>(params Expression<Func<ServiceType, TProp>>[] includeProperties)
         {
-            IIncludableQueryable<Customer, TProp> query = null;
+            IIncludableQueryable<ServiceType, TProp> query = null;
             if (includeProperties.Length > 0)
             {
-                query = _db.Customers.Include(includeProperties[0]);
+                query = _db.ServiceTypes.Include(includeProperties[0]);
             }
             for (int queryIndex = 1; queryIndex < includeProperties.Length; ++queryIndex)
             {
                 query = query.Include(includeProperties[queryIndex]);
             }
-            return query == null ? All() : (IQueryable<Customer>)query;
+            return query == null ? All() : (IQueryable<ServiceType>)query;
         }
 
-        public Customer GetById(int id)
+        public ServiceType GetById(int id)
         {
-            return _db.Customers
-                .Include(x => x.Deals)
-                .Include(x => x.Notes)
-                .Include(x => x.Websites)
-                .SingleOrDefault(x => x.CustomerId == id);
+            return _db.ServiceTypes.SingleOrDefault(x => x.ServiceTypeId == id);
         }
 
-        public int Add(Customer entity)
+        public int Add(ServiceType entity)
         {
             var rec = _db.Add(entity);
             _db.SaveChanges();
-            return rec.Entity.CustomerId;
+            return rec.Entity.ServiceTypeId;
         }
 
-        public void Update(Customer entity)
+        public void Update(ServiceType entity)
         {
             _db.Entry(entity).State = EntityState.Modified;
             _db.SaveChanges();
         }
 
-        public void Delete(Customer entity)
+        public void Delete(ServiceType entity)
         {
             _db.Remove(entity);
             _db.SaveChanges();
@@ -73,13 +69,8 @@ namespace SynWebCRM.Data.EF
 
         public void Delete(int id)
         {
-            var rec = _db.Customers.Find(id);
+            var rec = _db.ServiceTypes.Find(id);
             Delete(rec);
-        }
-
-        public IEnumerable<Customer> AllWithDeals()
-        {
-            return _db.Customers.Include(x => x.Deals).ThenInclude(x => x.DealState).ToList();
         }
     }
 }

@@ -8,25 +8,31 @@ using Microsoft.EntityFrameworkCore;
 using SynWebCRM.Web.Security;
 using SynWebCRM.Data.EF;
 using SynWebCRM.Contract.Models;
+using SynWebCRM.Contract.Repositories;
 
 namespace SynWebCRM.Web.Controllers
 {
     [Authorize(Roles = CRMRoles.Admin + "," + CRMRoles.Sales)]
     public class DealsController : Controller
     {
-        public DealsController(CRMModel crmModel)
+        private readonly IDealRepository _dealRepository;
+        private readonly ICustomerRepository _customerRepository;
+        private readonly IDealStateRepository _dealStateRepository;
+        private readonly IServiceTypeRepository _serviceTypeRepository;
+
+        public DealsController(IDealRepository dealRepository, ICustomerRepository customerRepository, IDealStateRepository dealStateRepository, IServiceTypeRepository serviceTypeRepository)
         {
-            _crmModel = crmModel;
+            _dealRepository = dealRepository;
+            _customerRepository = customerRepository;
+            _dealStateRepository = dealStateRepository;
+            _serviceTypeRepository = serviceTypeRepository;
         }
 
-        private readonly CRMModel _crmModel;
-        private IEnumerable<Customer> Customers { get { return  _crmModel.Customers.OrderByDescending(x => x.CreationDate).ToList();} }
+        //private readonly CRMModel _crmModel;
         
         private SelectList GetCustomersSelectList(int? selectedId= null)
         {
-            var res = new SelectList(
-                Customers.OrderByDescending(x => x.Deals.Count)
-                    .ThenBy(x => x.Name)
+            var res = new SelectList( _customerRepository.AllWithDeals().OrderByDescending(x => x.Deals.Count)
                     .Select(x => new SelectListItem()
                     {Text = $"{x.Name} ({x.CreationDate:dd.MM.yyyy})", Value = x.CustomerId.ToString()}),
                 "Value", "Text", selectedId);
@@ -46,11 +52,7 @@ namespace SynWebCRM.Web.Controllers
             {
                 return StatusCode(404);
             }
-            Deal deal = _crmModel.Deals
-                .Include(x => x.Customer)
-                .Include(x => x.Estimates)
-                .Include(x => x.Notes)
-                .Single(x => x.DealId == id);
+            Deal deal = _dealRepository.GetById(id.Value);
             if (deal == null)
             {
                 return StatusCode(400);
@@ -62,8 +64,8 @@ namespace SynWebCRM.Web.Controllers
         public ActionResult Create(int? customerId)
         {
             ViewBag.CustomerId = GetCustomersSelectList(customerId);
-            ViewBag.DealStateId = new SelectList(_crmModel.DealStates.OrderBy(x => x.Order), nameof(DealState.DealStateId), nameof(DealState.Name));
-            ViewBag.ServiceTypeId = new SelectList(_crmModel.ServiceTypes.OrderBy(x => x.ServiceTypeId), nameof(ServiceType.ServiceTypeId), nameof(ServiceType.Name));
+            ViewBag.DealStateId = new SelectList(_dealStateRepository.All(), nameof(DealState.DealStateId), nameof(DealState.Name));
+            ViewBag.ServiceTypeId = new SelectList(_serviceTypeRepository.All(), nameof(ServiceType.ServiceTypeId), nameof(ServiceType.Name));
             var dealTypes = (from DealType i in Enum.GetValues(typeof(DealType))
                              select new SelectListItem { Text = i.ToString(), Value = i.ToString() }).ToList();
             ViewBag.DealType = dealTypes;
@@ -83,14 +85,13 @@ namespace SynWebCRM.Web.Controllers
             if (ModelState.IsValid)
             {
                 deal.Creator = User.Identity.Name;
-                _crmModel.Deals.Add(deal);
-                _crmModel.SaveChanges();
+                _dealRepository.Add(deal);
                 return RedirectToAction("Index");
             }
 
             ViewBag.CustomerId = GetCustomersSelectList();
-            ViewBag.DealStateId = new SelectList(_crmModel.DealStates.OrderBy(x => x.Order), nameof(DealState.DealStateId), nameof(DealState.Name));
-            ViewBag.ServiceTypeId = new SelectList(_crmModel.ServiceTypes.OrderBy(x => x.ServiceTypeId), nameof(ServiceType.ServiceTypeId), nameof(ServiceType.Name));
+            ViewBag.DealStateId = new SelectList(_dealStateRepository.All(), nameof(DealState.DealStateId), nameof(DealState.Name));
+            ViewBag.ServiceTypeId = new SelectList(_serviceTypeRepository.All(), nameof(ServiceType.ServiceTypeId), nameof(ServiceType.Name));
             return View(deal);
         }
 
@@ -101,14 +102,14 @@ namespace SynWebCRM.Web.Controllers
             {
                 return StatusCode(400);
             }
-            Deal deal = _crmModel.Deals.Find(id);
+            Deal deal = _dealRepository.GetById(id.Value);
             if (deal == null)
             {
                 return StatusCode(400);
             }
             ViewBag.CustomerId = GetCustomersSelectList(deal.CustomerId);
-            ViewBag.DealStateId = new SelectList(_crmModel.DealStates.OrderBy(x => x.Order), nameof(DealState.DealStateId), nameof(DealState.Name), deal.DealStateId);
-            ViewBag.ServiceTypeId = new SelectList(_crmModel.ServiceTypes.OrderBy(x => x.ServiceTypeId), nameof(ServiceType.ServiceTypeId), nameof(ServiceType.Name), deal.ServiceTypeId);
+            ViewBag.DealStateId = new SelectList(_dealStateRepository.All(), nameof(DealState.DealStateId), nameof(DealState.Name));
+            ViewBag.ServiceTypeId = new SelectList(_serviceTypeRepository.All(), nameof(ServiceType.ServiceTypeId), nameof(ServiceType.Name));
             return View(deal);
         }
 
@@ -121,8 +122,7 @@ namespace SynWebCRM.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                _crmModel.Entry(deal).State = EntityState.Modified;
-                _crmModel.SaveChanges();
+                _dealRepository.Update(deal);
                 return RedirectToAction("Index");
             }
 
@@ -136,7 +136,7 @@ namespace SynWebCRM.Web.Controllers
             {
                 return StatusCode(400);
             }
-            Deal deal = _crmModel.Deals.Find(id);
+            Deal deal = _dealRepository.GetById(id.Value);
             if (deal == null)
             {
                 return StatusCode(400);
@@ -149,18 +149,16 @@ namespace SynWebCRM.Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Deal deal = _crmModel.Deals.Find(id);
-            _crmModel.Deals.Remove(deal);
-            _crmModel.SaveChanges();
+            _dealRepository.Delete(id);
             return RedirectToAction("Index");
         }
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
-                _crmModel.Dispose();
-            }
+            //if (disposing)
+            //{
+            //    _crmModel.Dispose();
+            //}
             base.Dispose(disposing);
         }
     }

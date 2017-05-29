@@ -16,7 +16,7 @@ namespace SynWebCRM.Web.Controllers
         }
 
         //private readonly CRMModel _crmModel;
-        private IEventRepository _eventRepository;
+        private readonly IEventRepository _eventRepository;
 
         public ActionResult Index()
         {
