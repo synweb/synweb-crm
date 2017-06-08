@@ -19,7 +19,6 @@
     <Content Include="Templates\ics-template.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="wwwroot\css\bootstrap.min.css" />
     <Content Include="wwwroot\css\estimate.print.css" />
     <Content Include="wwwroot\css\fullcalendar.css" />
     <Content Include="wwwroot\css\fullcalendar.print.css" />

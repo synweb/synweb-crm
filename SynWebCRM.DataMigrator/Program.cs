@@ -8,7 +8,7 @@ namespace SynWebCRM.DataMigrator
         static void Main(string[] args)
         {
             string mssqlConnectionString = "";
-            string pgsqlConnectionString = "User ID=synwebcrm;Password=777888;Host=localhost;Port=5432;Database=synwebcrm;Pooling=true;";
+            string pgsqlConnectionString = "";
 
             using (var mssqldb = new MSSQL.Model(mssqlConnectionString))
             using (var pgsqldb = new PGSQL.CRMModel(pgsqlConnectionString))
