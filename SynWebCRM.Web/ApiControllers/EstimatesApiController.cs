@@ -7,34 +7,35 @@ using SynWebCRM.Web.Models;
 using SynWebCRM.Web.Security;
 using SynWebCRM.Data.EF;
 using SynWebCRM.Contract.Models;
+using SynWebCRM.Contract.Repositories;
 
 namespace SynWebCRM.Web.ApiControllers
 {
     [Authorize(Roles = CRMRoles.Admin + "," + CRMRoles.Sales)]
-    public class EstimatesController : Controller
+    public class EstimatesApiController : Controller
     {
-        private CRMModel _crmModel;
+        private readonly IEstimateRepository _estimateRepository;
+        private readonly IEstimateItemRepository _estimateItemRepository;
 
-        public EstimatesController(CRMModel crmModel)
+        public EstimatesApiController(IEstimateRepository estimateRepository, IEstimateItemRepository estimateItemRepository)
         {
-            _crmModel = crmModel;
+            _estimateRepository = estimateRepository;
+            _estimateItemRepository = estimateItemRepository;
         }
-        
+
         [HttpGet]
         [Route("api/estimates/{id}/get")]
         public ResultModel GetEstimate(int id)
         {
             try
             {
-                
-                var rec = _crmModel.Estimates
-                    .Include(x => x.Items)
-                    .SingleOrDefault(x => x.EstimateId == id);
+
+                var rec = _estimateRepository.GetById(id);
                 if (rec == null)
                 {
                     return new ResultModel(false, $"id {id} NotFound");
                 }
-                rec.Items = rec.Items.OrderBy(x => x.SortOrder).ThenBy(x => x.CreationDate).ToList();
+                rec.Items = _estimateItemRepository.GetByEstimateId(id).ToList(); //rec.Items.OrderBy(x => x.SortOrder).ThenBy(x => x.CreationDate).ToList();
                 return new ResultModel(true, rec);
             }
             catch (Exception e)
@@ -59,25 +60,22 @@ namespace SynWebCRM.Web.ApiControllers
                     {
                         item.EstimateId = estimate.EstimateId;
                         item.CreationDate = DateTime.Now;
-                        _crmModel.EstimateItems.Add(item);
+                        _estimateItemRepository.Add(item);
                     }
                     else
                     {
-                        _crmModel.EstimateItems.Attach(item);
-                        _crmModel.Entry(item).State = EntityState.Modified;
+                        _estimateItemRepository.Update(item);
                     }
                 }
                 var itemsForDelete =
-                    _crmModel.EstimateItems.Where(x => x.EstimateId == estimate.EstimateId).ToList()
+                    _estimateItemRepository.GetByEstimateId(estimate.EstimateId)
                         .Where(x => estimate.Items.All(y => y.ItemId != x.ItemId)).ToList();
                 foreach (var item in itemsForDelete)
                 {
-                    _crmModel.EstimateItems.Remove(item);
+                    _estimateItemRepository.Delete(item);
                 }
 
-                _crmModel.Estimates.Attach(estimate);
-                _crmModel.Entry(estimate).State = EntityState.Modified;
-                _crmModel.SaveChanges();
+                _estimateRepository.Update(estimate);
                 return new ResultModel(true);
             }
             catch (Exception e)

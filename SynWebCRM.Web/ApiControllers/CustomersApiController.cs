@@ -9,9 +9,9 @@ namespace SynWebCRM.Web.ApiControllers
 {
 
     [Route("api/[controller]")]
-    public class CustomersController : Controller
+    public class CustomersApiController : Controller
     {
-        public CustomersController(CRMModel crmModel)
+        public CustomersApiController(CRMModel crmModel)
         {
             _crmModel = crmModel;
         }

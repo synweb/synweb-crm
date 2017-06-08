@@ -6,9 +6,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using SynWebCRM.Contract.Models;
 using SynWebCRM.Contract.Repositories;
 using SynWebCRM.Data.EF;
 using SynWebCRM.Data.EF.Models;
+using SynWebCRM.Web.ApiControllers.Models;
 //using SynWebCRM.Contract.Models;
 //using SynWebCRM.Contract.Repositories;
 //using SynWebCRM.Data.EF;
@@ -66,6 +68,8 @@ namespace SynWebCRM.Web
             services.AddTransient<IDealStateRepository, DealStateRepository>();
             services.AddTransient<IServiceTypeRepository, ServiceTypeRepository>();
             services.AddTransient<IWebsiteRepository, WebsiteRepository>();
+            services.AddTransient<IEstimateItemRepository, EstimateItemRepository>();
+            services.AddTransient<IEstimateRepository, EstimateRepository>();
             services.AddMvc();
 
             // Add application services.
@@ -108,18 +112,18 @@ namespace SynWebCRM.Web
 
         public static void ConfigureMapper()
         {
-            //Mapper.Initialize(cfg =>
-            //{
-            //    //cfg.CreateMap<Customer, DealsApiController.CustomerModel>();
+            Mapper.Initialize(cfg =>
+            {
+                //cfg.CreateMap<Customer, DealsApiController.CustomerModel>();
 
-            //    cfg.CreateMap<Deal, DealModel>()
-            //        .ForMember(x => x.CreationDate, x => x.MapFrom(y => y.CreationDate.ToString("yyyy-MM-dd HH:mm")))
-            //        .ForMember(x => x.Customer, x => x.MapFrom(y => y.Customer.Name))
-            //        .ForMember(x => x.DealState, x => x.MapFrom(y => y.DealState.Name))
-            //        .ForMember(x => x.Type, x => x.MapFrom(y => y.Type == DealType.Incoming ? "Входящая" : "Исходящая"))
-            //        .ForMember(x => x.Customer, x => x.MapFrom(y => new CustomerModel { CustomerId = y.Customer.CustomerId, Name = y.Customer.Name }));
-            //});
-            //Mapper.AssertConfigurationIsValid();
+                cfg.CreateMap<Deal, DealModel>()
+                    .ForMember(x => x.CreationDate, x => x.MapFrom(y => y.CreationDate.ToString("yyyy-MM-dd HH:mm")))
+                    .ForMember(x => x.Customer, x => x.MapFrom(y => y.Customer.Name))
+                    .ForMember(x => x.DealState, x => x.MapFrom(y => y.DealState.Name))
+                    .ForMember(x => x.Type, x => x.MapFrom(y => y.Type == DealType.Incoming ? "Входящая" : "Исходящая"))
+                    .ForMember(x => x.Customer, x => x.MapFrom(y => new CustomerModel { CustomerId = y.Customer.CustomerId, Name = y.Customer.Name }));
+            });
+            Mapper.AssertConfigurationIsValid();
         }
 
         //public class DecimalModelBinder : Microsoft.AspNetCore.Mvc.ModelBinding.IModelBinder
