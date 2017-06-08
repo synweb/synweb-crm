@@ -68,6 +68,16 @@ namespace SynWebCRM.Data.EF
             _db.Events.Remove(_db.Events.Find(id));
         }
 
+        public ICollection<Event> GetByDates(DateTime start, DateTime end)
+        {
+            return _db.Events.Where(x => x.StartDate >= start
+                                         && x.StartDate <= end
+                                         || x.EndDate.HasValue
+                                         && x.EndDate >= start
+                                         && x.EndDate <= end)
+                    .ToList();
+        }
+
         public void SetStorageContext(IStorageContext storageContext)
         { 
             //this.storageContext = storageContext as StorageContext;

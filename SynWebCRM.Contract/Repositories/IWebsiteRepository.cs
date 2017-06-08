@@ -7,5 +7,7 @@ namespace SynWebCRM.Contract.Repositories
 {
     public interface IWebsiteRepository: IRepository<Website, int>
     {
+        ICollection<Website> GetEndingByDomain(DateTime start, DateTime end);
+        ICollection<Website> GetEndingByHosting(DateTime start, DateTime end);
     }
 }

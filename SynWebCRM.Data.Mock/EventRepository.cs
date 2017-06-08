@@ -82,6 +82,16 @@ namespace SynWebCRM.Data.Mock
             _events.RemoveAll(x => x.EventId == id);
         }
 
+        public ICollection<Event> GetByDates(DateTime start, DateTime end)
+        {
+            return _events.Where(x => x.StartDate >= start
+                                      && x.StartDate <= end
+                                      || x.EndDate.HasValue
+                                      && x.EndDate >= start
+                                      && x.EndDate <= end)
+                .ToList();
+        }
+
         public IEnumerable<Event> AllIncluding<TProp>(params Expression<Func<Event, TProp>>[] includeProperties)
         {
             return All();

@@ -4,6 +4,7 @@ using SynWebCRM.Web.ApiControllers.Models;
 using SynWebCRM.Web.Models;
 using SynWebCRM.Data.EF;
 using SynWebCRM.Contract.Models;
+using SynWebCRM.Contract.Repositories;
 
 namespace SynWebCRM.Web.ApiControllers
 {
@@ -11,12 +12,15 @@ namespace SynWebCRM.Web.ApiControllers
     [Route("api/[controller]")]
     public class CustomersApiController : Controller
     {
-        public CustomersApiController(CRMModel crmModel)
+        private readonly ICustomerRepository _customerRepository;
+        private readonly INoteRepository _noteRepository;
+
+        public CustomersApiController(ICustomerRepository customerRepository, INoteRepository noteRepository)
         {
-            _crmModel = crmModel;
+            _customerRepository = customerRepository;
+            _noteRepository = noteRepository;
         }
 
-        private readonly CRMModel _crmModel;
 
         [HttpPost]
         [Route("/api/customers/notes/add")]
@@ -32,10 +36,8 @@ namespace SynWebCRM.Web.ApiControllers
 
                 };
                 var cust = new Customer() { CustomerId = note.TargetId };
-                _crmModel.Customers.Attach(cust);
                 newNote.Customer = cust;
-                _crmModel.Notes.Add(newNote);
-                _crmModel.SaveChanges();
+                _noteRepository.Add(newNote);
                 return new ResultModel(true, newNote.NoteId);
             }
             catch (Exception e)

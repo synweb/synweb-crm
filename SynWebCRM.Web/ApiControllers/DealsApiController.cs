@@ -8,28 +8,27 @@ using SynWebCRM.Web.ApiControllers.Models;
 using SynWebCRM.Web.Models;
 using SynWebCRM.Data.EF;
 using SynWebCRM.Contract.Models;
+using SynWebCRM.Contract.Repositories;
 
 namespace SynWebCRM.Web.ApiControllers
 {
     [Route("api/[controller]")]
     public class DealsApiController : Controller
     {
-        private CRMModel _crmModel;
+        private readonly IDealRepository _dealRepository;
+        private readonly INoteRepository _noteRepository;
 
-        public DealsApiController(CRMModel crmModel)
+        public DealsApiController(IDealRepository dealRepository, INoteRepository noteRepository)
         {
-            _crmModel = crmModel;
+            _dealRepository = dealRepository;
+            _noteRepository = noteRepository;
         }
 
         [HttpGet]
         [Route("/api/deals/get")]
         public ICollection<DealModel> GetDeals()
         {
-            List<Deal> dataRes = _crmModel.Deals
-                .Include(x => x.Customer)
-                .Include(x => x.DealState)
-                .OrderByDescending(x => x.NeedsAttention)
-                .ThenByDescending(x => x.CreationDate).ToList();
+            List<Deal> dataRes = _dealRepository.All().ToList();
             var res = Mapper.Map<ICollection<DealModel>>(dataRes);
             return res;
         }
@@ -47,10 +46,8 @@ namespace SynWebCRM.Web.ApiControllers
                     Creator = User.Identity.Name
                 };
                 var deal = new Deal() { DealId = note.TargetId };
-                _crmModel.Deals.Attach(deal);
                 newNote.Deal = deal;
-                _crmModel.Notes.Add(newNote);
-                _crmModel.SaveChanges();
+                _noteRepository.Add(newNote);
                 return new ResultModel(true, newNote.NoteId);
             }
             catch (Exception e)

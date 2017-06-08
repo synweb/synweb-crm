@@ -26,7 +26,13 @@ namespace SynWebCRM.Data.EF
 
         public IEnumerable<Deal> All()
         {
-            return _db.Deals.Include(x => x.DealState).Include(x => x.ServiceType).ToList();
+            return _db.Deals
+                .Include(x => x.Customer)
+                .Include(x => x.DealState)
+                .Include(x => x.ServiceType)
+                .OrderByDescending(x => x.NeedsAttention)
+                .ThenByDescending(x => x.CreationDate)
+                .ToList();
         }
 
         public IEnumerable<Deal> AllIncluding<TProp>(params Expression<Func<Deal, TProp>>[] includeProperties)

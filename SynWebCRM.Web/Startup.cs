@@ -70,6 +70,7 @@ namespace SynWebCRM.Web
             services.AddTransient<IWebsiteRepository, WebsiteRepository>();
             services.AddTransient<IEstimateItemRepository, EstimateItemRepository>();
             services.AddTransient<IEstimateRepository, EstimateRepository>();
+            services.AddTransient<INoteRepository, NoteRepository>();
             services.AddMvc();
 
             // Add application services.

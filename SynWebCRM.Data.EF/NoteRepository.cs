@@ -9,7 +9,7 @@ using SynWebCRM.Contract.Repositories;
 
 namespace SynWebCRM.Data.EF
 {
-    class NoteRepository: INoteRepository
+    public class NoteRepository: INoteRepository
     {
         public NoteRepository(CRMModel db)
         {
@@ -50,6 +50,14 @@ namespace SynWebCRM.Data.EF
 
         public int Add(Note entity)
         {
+            if(entity.Deal != null)
+            {
+                _db.Deals.Attach(entity.Deal);
+            }
+            if (entity.Customer != null)
+            {
+                _db.Customers.Attach(entity.Customer);
+            }
             var rec = _db.Add(entity);
             _db.SaveChanges();
             return rec.Entity.NoteId;

@@ -10,19 +10,23 @@ using Microsoft.AspNetCore.Mvc;
 using SynWebCRM.Web.Models;
 using SynWebCRM.Data.EF;
 using SynWebCRM.Contract.Models;
-using Microsoft.AspNetCore.Http.Extensions; 
+using Microsoft.AspNetCore.Http.Extensions;
+using SynWebCRM.Contract.Repositories;
 
 namespace SynWebCRM.Web.ApiControllers
 {
     [Authorize(Roles = "Admin")]
     public class CalendarApiController : Controller
     {
-        private CRMModel _crmModel;
+        private readonly IEventRepository _eventRepository;
+        private readonly IWebsiteRepository _websiteRepository;
 
-        public CalendarApiController(CRMModel crmModel)
+        public CalendarApiController(IEventRepository eventRepository, IWebsiteRepository websiteRepository)
         {
-            _crmModel = crmModel;
+            _eventRepository = eventRepository;
+            _websiteRepository = websiteRepository;
         }
+
 
         private string ServerUrl => "http://" + Request.GetUri().Authority + "/";
 
@@ -41,9 +45,8 @@ namespace SynWebCRM.Web.ApiControllers
         public ResultModel CreateEvent(Event ev)
         {
             ev.CreationDate = DateTime.Now;
-            var @event = _crmModel.Events.Add(ev);
-            _crmModel.SaveChanges();
-            var res = new EventJsonItem(@event.Entity) { url = ServerUrl + "Calendar/EventDetails/" + ev.EventId };
+            _eventRepository.Add(ev);
+            var res = new EventJsonItem(ev) { url = ServerUrl + "Calendar/EventDetails/" + ev.EventId };
             return new ResultModel(true, res);
         }
 
@@ -60,7 +63,6 @@ namespace SynWebCRM.Web.ApiControllers
         {
             DateTime start = DateTime.Parse($"{DateTime.Now.AddYears(-1).Year}-01-01");
             DateTime end = start.AddYears(2);
-
             string calTemplate =
                 System.IO.File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), "Templates", "ics-template.txt"));
             string eventTemplate =
@@ -76,45 +78,25 @@ namespace SynWebCRM.Web.ApiControllers
                 .Replace("%startDate%", x.Start.ToString("yyyyMMdd"))
                 .Replace("%endDate%", x.End?.ToString("yyyyMMdd") ?? x.Start.AddDays(1).ToString("yyyyMMdd"))
                 ).ToArray();
-
             for (int i = 0; i < eventsStrings.Length; i++)
             {
                 eventsStrings[i] = eventsStrings[i].Replace("%uid%", (i + 1).ToString());
             }
-
             var calString = calTemplate
                 .Replace("%calendarName%", "SynWeb CRM Calendar")
                 .Replace("%events%", string.Join(Environment.NewLine, eventsStrings)
                 );
-
-
-            //var stream = new MemoryStream();
-
             byte[] bytes = Encoding.UTF8.GetBytes(calString);
-            //stream.Write(bytes, 0, bytes.Length);
-            //stream.Position = 0;
             var res = new FileContentResult(bytes, "text/calendar") {FileDownloadName = "SynwebCRM.ics"};
             return res;
-            //var result = new HttpResponseMessage(HttpStatusCode.OK)
-            //{
-            //    Content = new ByteArrayContent(stream.GetBuffer())
-            //};
-            //result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
-            //{
-            //    FileName = "SynwebCRM.ics"
-            //};
-            //result.Content.Headers.ContentType = new MediaTypeHeaderValue("text/calendar");
-            //return result;
         }
 
         private ICollection<EventItem> GetDomainEvents(DateTime start, DateTime end)
         {
             var url = "http://" + Request.GetUri().Authority + "/";
-            var hostings = _crmModel.Websites.Where(x => x.IsActive
-                                                  && x.DomainEndingDate.HasValue
-                                                  && x.DomainEndingDate.Value >= start
-                                                  && x.DomainEndingDate.Value <= end)
-                .ToList().Select(x => new EventItem()
+            var websites = _websiteRepository.GetEndingByDomain(start, end);
+            
+            var hostings = websites.Select(x => new EventItem()
                 {
                     Id = "Website" + x.WebsiteId,
                     Title = "Домен " + x.Domain,
@@ -129,11 +111,8 @@ namespace SynWebCRM.Web.ApiControllers
         private ICollection<EventItem> GetHostingEvents(DateTime start, DateTime end)
         {
             var url = "http://" + Request.GetUri().Authority + "/";
-            var hostings = _crmModel.Websites.Where(x => x.IsActive
-                                                  && x.HostingEndingDate.HasValue
-                                                  && x.HostingEndingDate.Value >= start
-                                                  && x.HostingEndingDate.Value <= end)
-                .ToList().Select(x => new EventItem()
+            var websites = _websiteRepository.GetEndingByHosting(start, end);
+            var hostings = websites.Select(x => new EventItem()
                 {
                     Id = "Website" + x.WebsiteId,
                     Title = "Хостинг " + x.Domain,
@@ -148,11 +127,7 @@ namespace SynWebCRM.Web.ApiControllers
         private ICollection<EventItem> GetDbEvents(DateTime start, DateTime end)
         {
             var url = "http://" + Request.GetUri().Authority + "/";
-            var events = _crmModel.Events.Where(x => x.StartDate >= start
-                                              && x.StartDate <= end
-                                              || x.EndDate.HasValue
-                                                && x.EndDate >= start
-                                                && x.EndDate <= end)
+            var events = _eventRepository.GetByDates(start, end)
                 .Select(x => new EventItem()
                 {
                     Id = "Event" + x.EventId,

@@ -73,5 +73,24 @@ namespace SynWebCRM.Data.EF
             var rec = _db.Websites.Find(id);
             Delete(rec);
         }
+
+        public ICollection<Website> GetEndingByDomain(DateTime start, DateTime end)
+        {
+
+            return _db.Websites.Where(x => x.IsActive
+                                           && x.DomainEndingDate.HasValue
+                                           && x.DomainEndingDate.Value >= start
+                                           && x.DomainEndingDate.Value <= end)
+                .ToList();
+        }
+
+        public ICollection<Website> GetEndingByHosting(DateTime start, DateTime end)
+        {
+            return _db.Websites.Where(x => x.IsActive
+                                           && x.HostingEndingDate.HasValue
+                                           && x.HostingEndingDate.Value >= start
+                                           && x.HostingEndingDate.Value <= end)
+                .ToList();
+        }
     }
 }
