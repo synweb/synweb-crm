@@ -9,9 +9,10 @@ using SynWebCRM.Contract.Models;
 namespace SynWebCRM.Data.EF.Migrations
 {
     [DbContext(typeof(CRMModel))]
-    partial class CRMModelModelSnapshot : ModelSnapshot
+    [Migration("20170608082040_KeyFixes")]
+    partial class KeyFixes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)

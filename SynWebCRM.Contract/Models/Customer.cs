@@ -17,6 +17,8 @@ namespace SynWebCRM.Contract.Models
         }
 
         [Display(Name = "Клиент")]
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int CustomerId { get; set; }
 
         [Display(Name="Дата добавления")]
