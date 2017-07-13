@@ -99,7 +99,7 @@ namespace SynWebCRM.Web.Controllers
             {
                 return StatusCode(400);
             }
-            ViewBag.OwnerId = new SelectList(_customerRepository.All(), "CustomerId", "Name");
+            ViewBag.OwnerId = new SelectList(_customerRepository.All(), "CustomerId", "Name", website.OwnerId);
             return View(website);
         }
 
