@@ -31,7 +31,7 @@ namespace SynWebCRM.Web.Controllers
                 .ThenByDescending(x => x.CreationDate);
             return View(customers);
         }
-
+        
         // GET: Customers/Details/5
         public IActionResult Details(int? id)
         {

@@ -9,6 +9,7 @@ using SynWebCRM.Web.Security;
 using SynWebCRM.Data.EF;
 using SynWebCRM.Contract.Models;
 using SynWebCRM.Contract.Repositories;
+using SynWebCRM.Web.Models;
 
 namespace SynWebCRM.Web.Controllers
 {
@@ -28,8 +29,6 @@ namespace SynWebCRM.Web.Controllers
             _serviceTypeRepository = serviceTypeRepository;
         }
 
-        //private readonly CRMModel _crmModel;
-        
         private SelectList GetCustomersSelectList(int? selectedId= null)
         {
             var res = new SelectList( _customerRepository.AllWithDeals().OrderByDescending(x => x.Deals.Count)
@@ -43,6 +42,22 @@ namespace SynWebCRM.Web.Controllers
         public ActionResult Index()
         {
             return View();
+        }
+
+        public ActionResult NewDealWithCustomer()
+        {
+            ViewBag.ServiceTypeId = new SelectList(_serviceTypeRepository.All(), nameof(ServiceType.ServiceTypeId), nameof(ServiceType.Name));
+            ViewBag.DealStateId = new SelectList(_dealStateRepository.All(), nameof(DealState.DealStateId), nameof(DealState.Name));
+
+            var model = new NewDealWithCustomerModel(){Customer = new Customer(){CreationDate = DateTime.Now}, Deal = new Deal(){CreationDate = DateTime.Now}};
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult NewDealWithCustomer(NewDealWithCustomerModel model)
+        {
+            return new RedirectToActionResult(nameof(Index), nameof(DealsController), null);
         }
 
         // GET: Deals/Details/5
@@ -151,15 +166,6 @@ namespace SynWebCRM.Web.Controllers
         {
             _dealRepository.Delete(id);
             return RedirectToAction("Index");
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            //if (disposing)
-            //{
-            //    _crmModel.Dispose();
-            //}
-            base.Dispose(disposing);
         }
     }
 }

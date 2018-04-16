@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using SynWebCRM.Data.EF.Models;
 using SynWebCRM.DataMigrator.Models;
 using SynWebCRM.Web.Models;
 
